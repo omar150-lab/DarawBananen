@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دراو بنين الثانوية</title>
+<meta name="description" content="الموقع الرسمي لمدرسة دراو بنين الثانوية في أسوان، تأسست عام ١٩٠٤.">
+<meta name="author" content="عمر الحسين صلاح الدين دياب">
+<meta name="theme-color" content="#0E7C6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--hero-img:url("images/hero.webp");--bg:#F4F7F5;--ink:#17302D;--muted:#58706C;--teal:#0E7C6B;--deep:#0A5C50;--card:#fff;--line:#DCE6E2;
+--c1:#F2A33A;--c2:#A66BD6;--c3:#4FB35A;--c4:#E5484D;--c5:#1FA6A0;--hexp:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.9 "Tajawal",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:"Reem Kufi","Tajawal",sans-serif;margin:0;line-height:1.3}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--c1);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+section{padding:84px 0 0}
+.t{text-align:center;margin-bottom:42px}
+.t h2{font-size:clamp(34px,5vw,50px);color:var(--teal)}
+.t p{margin:6px auto 0;color:var(--muted);max-width:30em}
+
+header{position:fixed;inset-inline:0;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);transform:translateY(-110%);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+header.on{transform:none}
+.bar{display:flex;align-items:center;gap:18px;min-height:64px}
+.brand{font:700 22px/1 "Reem Kufi",sans-serif;color:var(--teal);margin-inline-end:auto;white-space:nowrap}
+nav{display:flex;gap:24px;font-weight:500;align-items:center}
+nav a:hover{color:var(--teal)}
+nav .pill{background:var(--teal);color:#fff;padding:3px 20px;border-radius:999px}
+
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;color:#fff;padding:90px 22px 110px;position:relative;
+background:linear-gradient(180deg,rgba(6,56,50,.6),rgba(6,56,50,.4) 50%,rgba(6,56,50,.82)),var(--hero-img) center 38%/cover no-repeat #0A5C50}
+.hero small{display:inline-block;border:1.5px solid rgba(255,255,255,.7);border-radius:999px;padding:2px 20px;font-size:16px}
+.hero h1{font-size:clamp(46px,9vw,112px);margin:18px 0 10px;text-shadow:0 4px 24px rgba(0,0,0,.35)}
+.hero p{font-size:clamp(20px,2.6vw,28px);margin:0 auto;max-width:24em;text-shadow:0 2px 14px rgba(0,0,0,.4)}
+.cue{position:absolute;bottom:26px;inset-inline:0;margin:auto;width:46px;height:46px;border:2px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:22px;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(9px)}}
+
+.about{max-width:760px;margin:0 auto;text-align:center;font-size:21px}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;margin-top:44px}
+.dot{width:200px;height:200px;border-radius:50%;display:grid;place-content:center;text-align:center;color:#fff;padding:14px;line-height:1.35}
+.dot b{font:700 52px/1.1 "Reem Kufi",sans-serif;display:block}
+.dot span{font-size:17px}
+.d1{background:var(--c1)}.d2{background:var(--c2)}.d3{background:var(--c3)}
+
+.row{display:grid;grid-template-columns:210px 1fr;gap:30px;align-items:center;margin-bottom:34px}
+.row:nth-child(even){grid-template-columns:1fr 210px}.row:nth-child(even) .hex{order:2}
+.hex{width:210px;height:232px;clip-path:var(--hexp);display:grid;place-items:center;text-align:center;color:#fff;padding:0 38px;font:700 24px/1.3 "Reem Kufi",sans-serif}
+.c1{background:var(--c1)}.c2{background:var(--c2)}.c3{background:var(--c3)}.c4{background:var(--c4)}.c5{background:var(--c5)}
+.txt{margin:0;background:var(--card);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(14,100,90,.1)}
+
+.vision{background:var(--teal);color:#fff;margin-top:84px;padding:90px 0;position:relative;overflow:hidden}
+.vision h2{font-size:24px;color:#FFD58A;margin-bottom:16px}
+.vision blockquote{margin:0;font:500 clamp(26px,4vw,46px)/1.65 "Reem Kufi","Tajawal",sans-serif;max-width:24em}
+.fl{position:absolute;clip-path:var(--hexp);opacity:.18;pointer-events:none;animation:fl 9s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-22px) rotate(8deg)}}
+
+.who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;max-width:720px;margin:0 auto}
+.who .wide{grid-column:1/-1}
+.card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(14,100,90,.1)}
+.card img{display:block;width:100%;height:auto}
+.card div{padding:16px 22px 20px;border-top:4px solid var(--c1)}
+.card small{color:var(--muted);display:block;font-size:15px}
+.card h3{font-size:26px}
+.sign{border-top-color:var(--c2)}.sign b{font:700 clamp(24px,3.4vw,36px)/1.4 "Reem Kufi",sans-serif;display:block}
+.gal{height:min(52vw,420px);border-radius:18px;background:var(--hero-img) center/cover no-repeat #0A5C50;box-shadow:0 10px 30px rgba(14,100,90,.12)}
+.links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:24px}
+.btn{border:2px solid var(--teal);color:var(--teal);border-radius:999px;padding:8px 30px;font-weight:700;background:#fff}
+.btn:hover{background:var(--teal);color:#fff}
+footer{margin-top:90px;background:var(--deep);color:#EAF4F1;padding:40px 0;text-align:center}
+footer b{font:700 26px/1.4 "Reem Kufi",sans-serif;display:block}
+footer small{display:block;opacity:.85;font-size:15px}
+
+.js .pop{opacity:0;transform:scale(.25) rotate(-14deg);transition:transform .8s cubic-bezier(.34,1.56,.64,1),opacity .35s}
+.js .slide{opacity:0;transform:translateY(30px);transition:opacity .7s .12s,transform .7s .12s}
+.js .in{opacity:1;transform:none}
+@media (max-width:760px){
+  nav a:not(.pill){display:none}
+  .row,.row:nth-child(even){grid-template-columns:126px 1fr;gap:16px}
+  .row:nth-child(even) .hex{order:0}
+  .hex{width:126px;height:140px;font-size:16px;padding:0 20px}
+  .txt{padding:16px 18px;font-size:16.5px}
+  .dot{width:150px;height:150px}.dot b{font-size:40px}.dot span{font-size:15px}
+  .who{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js .pop,.js .slide{opacity:1;transform:none}html{scroll-behavior:auto}}
+[hidden]{display:none!important}
+nav a{white-space:nowrap}
+#burger,.burger2{display:none;width:44px;height:44px;border:1.5px solid var(--teal);border-radius:50%;background:none;cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center;padding:0}
+#burger i,.burger2 i{display:block;width:18px;height:2px;background:var(--teal);border-radius:2px;transition:transform .3s,opacity .3s}
+.burger2{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));inset-inline-end:16px;z-index:5;border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)}
+.burger2 i{background:#fff}
+[aria-expanded=true] i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+[aria-expanded=true] i:nth-child(2){opacity:0}
+[aria-expanded=true] i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+header.force{transform:none}
+.news{max-width:900px;margin:0 auto;background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(14,100,90,.1)}
+.nph{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:6px}
+.nph img{width:100%;height:100%;object-fit:cover;display:block}
+.nph .pt{grid-row:1/4;aspect-ratio:9/16}
+.nb{padding:20px 26px 24px;border-top:4px solid var(--c3)}
+.nb small{color:var(--muted);display:block;font-size:15px}
+.nb h3{font-size:26px;margin:2px 0 8px}
+.nb p{margin:0}
+.news img,.gg img,.who img{cursor:zoom-in}
+.lb{border:0;padding:0;background:none;max-width:100vw;max-height:100vh;width:100vw;height:100vh;color:#fff}
+.lb::backdrop{background:rgba(4,12,10,.93)}
+.lb[open]{display:grid;place-items:center}
+.lb figure{margin:0;text-align:center;max-width:96vw;max-height:88vh;overflow:auto}
+.lb img{display:block;margin:auto;max-width:94vw;max-height:78vh;border-radius:10px;cursor:zoom-in}
+.lb.zoom img{max-width:none;max-height:none;width:min(220vw,2400px);cursor:zoom-out}
+.lb figcaption{padding:10px 16px;font-size:15px;opacity:.85}
+.lb button{position:fixed;z-index:3;border:0;border-radius:50%;width:46px;height:46px;background:rgba(255,255,255,.16);color:#fff;font-size:26px;line-height:1;cursor:pointer;backdrop-filter:blur(4px)}
+.lb #lbx{top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:14px}
+.lb #lbL{left:12px;top:50%;margin-top:-23px}.lb #lbR{right:12px;top:50%;margin-top:-23px}
+.news+.news{margin-top:22px}
+html[data-theme=dark]{--bg:#0D1917;--ink:#E4F0ED;--muted:#9FB8B3;--teal:#45D3BA;--deep:#06231F;--card:#13272A;--line:#244240;color-scheme:dark}
+html[data-theme=dark] header{background:rgba(13,25,23,.96)}
+#theme,#bot{position:fixed;border:0;border-radius:50%;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:16}
+#bot{inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:58px;height:58px;background:linear-gradient(135deg,#0E7C6B,#7B5CD6);font-size:28px}
+#bot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid #45D3BA;opacity:0;animation:bp 2.4s infinite}
+@keyframes bp{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){#bot::after{animation:none}}
+#theme{inset-inline-end:84px;bottom:calc(24px + env(safe-area-inset-bottom,0px));width:42px;height:42px;background:#0A5C50;font-size:19px}
+#bp{position:fixed;inset-inline-end:16px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:17;width:min(380px,calc(100vw - 32px));height:min(540px,calc(100dvh - 170px));display:flex;flex-direction:column;background:var(--card);color:var(--ink);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);overflow:hidden;border:1px solid var(--line)}
+#bp[hidden]{display:none}
+.bh{display:grid;grid-template-columns:1fr auto;padding:12px 16px;background:linear-gradient(135deg,#0E7C6B,#7B5CD6);color:#fff;line-height:1.4}
+.bh b{font:700 20px "Reem Kufi",sans-serif}.bh small{grid-column:1;opacity:.9;font-size:13px}
+.bh button{grid-row:1/3;grid-column:2;border:0;background:rgba(255,255,255,.2);color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer}
+.bm{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.bm .m{max-width:86%;padding:8px 13px;border-radius:14px;font-size:16px;line-height:1.7;background:var(--bg);white-space:pre-line}
+.bm .m{unicode-bidi:plaintext}.bm .m.u{align-self:flex-end;background:#0E7C6B;color:#fff}
+.bm .m button{display:block;margin-top:6px;border:1.5px solid var(--teal);background:none;color:var(--teal);border-radius:999px;padding:2px 12px;font:700 14px "Tajawal",sans-serif;cursor:pointer}
+.bc{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 8px;scrollbar-width:none}
+.bc button{flex:none;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 12px;font:600 14px "Tajawal",sans-serif;cursor:pointer}
+.bi{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.bi input{flex:1;min-width:0;font:inherit;padding:8px 12px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink)}
+.bi button{border:0;border-radius:50%;width:40px;height:40px;background:#0E7C6B;color:#fff;cursor:pointer}
+html[dir=rtl] .bi button{transform:scaleX(-1)}
+.sg{max-width:640px;margin:0 auto;display:grid;gap:12px}
+.sg input,.sg textarea{font:inherit;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%;box-sizing:border-box}
+.sg button.btn{border:0;cursor:pointer;font:700 17px "Tajawal",sans-serif;justify-self:start}
+#sgs{margin:0;min-height:1.6em;color:var(--teal);font-weight:700}
+
+.nb small time{margin-inline-start:6px}.nb small time:empty{display:none}
+.nb .who{display:block;color:var(--teal);font-weight:700;margin:0 0 6px}
+.cap{padding:0 26px 10px;font:700 19px "Reem Kufi",sans-serif;color:var(--teal)}
+.hon{column-count:2;column-gap:6px;padding:0 6px 6px}
+.hon img{display:block;width:100%;height:auto;margin-bottom:6px;break-inside:avoid;border-radius:6px}
+.news.split{display:grid;grid-template-columns:320px 1fr;align-items:center}
+.news.split img{width:100%;height:auto;display:block}
+.news.split .nb{border-top:0;border-inline-start:4px solid var(--c1)}
+@media (max-width:760px){.news.split{grid-template-columns:1fr}.news.split .nb{border-inline-start:0;border-top:4px solid var(--c1)}}
+#burger{flex:none}
+@media (max-width:760px){[lang=en] .brand{font-size:14px;white-space:normal;line-height:1.2}}
+.menu{position:fixed;inset:0;z-index:19;background:linear-gradient(160deg,#0E7C6B,#0A5C50);color:#fff;padding:calc(90px + env(safe-area-inset-top,0px)) 30px 40px;overflow:hidden;display:flex;flex-direction:column;justify-content:center;opacity:0;transition:opacity .3s}
+.menu.open{opacity:1}
+.ml{display:flex;flex-direction:column;gap:4px;position:relative;z-index:1}
+.ml a{display:flex;align-items:center;gap:18px;font:700 clamp(30px,9vw,44px)/1.45 "Reem Kufi",sans-serif;opacity:0;transform:translateX(34px) scale(.92);transition:opacity .4s,transform .55s cubic-bezier(.34,1.56,.64,1)}
+[dir=ltr] .ml a{transform:translateX(-34px) scale(.92)}
+.menu.open .ml a{opacity:1;transform:none}
+.ml a::before{content:"";flex:none;width:26px;height:29px;background:var(--hx);clip-path:var(--hexp)}
+.ml a:nth-child(5n+1){--hx:var(--c1)}.ml a:nth-child(5n+2){--hx:var(--c2)}.ml a:nth-child(5n+3){--hx:var(--c3)}.ml a:nth-child(5n+4){--hx:var(--c4)}.ml a:nth-child(5n+5){--hx:var(--c5)}
+@media (max-width:760px){#burger,.burger2{display:flex}nav{display:none}}
+@media (max-width:1100px){[lang=en] #burger{display:flex}[lang=en] nav{display:none}}
+@media (max-width:760px){.brand{font-size:17px}.bar{gap:10px}nav .pill{padding:2px 14px;font-size:15px}#lang{padding:0 12px}}
+#prog{position:fixed;top:0;inset-inline:0;height:4px;z-index:30;transform-origin:100% 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c4),var(--c5))}
+[dir=ltr] #prog{transform-origin:0 50%}
+#up{position:fixed;inset-inline-start:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:0 6px 18px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .3s;z-index:15}
+#up.on{opacity:1;pointer-events:auto}
+#lang{border:1.5px solid var(--teal);background:none;color:var(--teal);height:36px;padding:0 16px;border-radius:999px;font:700 15px "Tajawal",sans-serif;cursor:pointer}
+.bub{position:absolute;bottom:-90px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);animation:up linear infinite;pointer-events:none}
+@keyframes up{to{transform:translateY(-115vh)}}
+.hero>div{position:relative}.hero{overflow:hidden}
+.lang2{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));inset-inline-start:16px;z-index:5;border:1.5px solid rgba(255,255,255,.8);background:rgba(255,255,255,.12);color:#fff;height:36px;padding:0 16px;border-radius:999px;font:700 15px "Tajawal",sans-serif;cursor:pointer;backdrop-filter:blur(4px)}
+.rw{color:#FFD58A;display:inline-block;transition:opacity .35s,transform .35s}
+.rw.o{opacity:0;transform:translateY(10px)}
+.ribbon{overflow:hidden;background:#fff;border-block:1px solid var(--line);padding:16px 0}
+.track{display:flex;width:max-content;animation:mq 36s linear infinite}
+@keyframes mq{to{transform:translateX(50%)}}@keyframes mqe{to{transform:translateX(-50%)}}
+[dir=ltr] .track{animation-name:mqe}
+.track span{font:700 22px/1 "Reem Kufi",sans-serif;color:var(--teal);padding:0 26px;white-space:nowrap}
+.track span::after{content:"";display:inline-block;width:14px;height:15px;margin-inline-start:52px;vertical-align:middle;background:var(--c1);clip-path:var(--hexp)}
+.track span:nth-child(5n+2)::after{background:var(--c2)}.track span:nth-child(5n+3)::after{background:var(--c3)}.track span:nth-child(5n+4)::after{background:var(--c4)}.track span:nth-child(5n+5)::after{background:var(--c5)}
+.calc{max-width:680px;margin:0 auto;background:var(--card);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(14,100,90,.1)}
+.calc h3{font-size:26px;margin-bottom:12px}
+.cr{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:10px;margin-bottom:10px}.cr.hd{color:var(--muted);font-size:14px;margin-bottom:2px}
+.cr input{font:inherit;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;width:100%;min-width:0;background:var(--bg);color:var(--ink)}
+.acts{display:flex;gap:10px;margin:8px 0}
+.acts button{border:2px solid var(--teal);color:var(--teal);background:#fff;border-radius:999px;padding:4px 20px;font:700 16px "Tajawal",sans-serif;cursor:pointer}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 10px;text-align:center}
+.res b{display:block;font:700 36px/1.3 "Reem Kufi",sans-serif;color:var(--teal)}.res span{color:var(--muted);font-size:15px}
+.pbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c4));transition:width .35s}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
+.gg{display:block;column-width:290px;column-gap:16px}.t0{aspect-ratio:4/3;border-radius:14px;background:var(--hero-img) center/cover no-repeat #0A5C50}
+.gg figure{margin:0 0 16px;position:relative;break-inside:avoid}
+.gg figcaption{position:absolute;inset-inline-start:10px;bottom:10px;background:rgba(6,56,50,.8);color:#fff;padding:1px 14px;border-radius:999px;font-size:14px}
+.gg img{width:100%;height:auto;border-radius:14px;display:block}
+[lang=en] .hex{font-size:19px;padding:0 30px}
+[lang=en] .hero h1{font-size:clamp(40px,7vw,88px)}
+@media (max-width:1100px){[lang=en] nav a:not(.pill){display:none}}
+@media (prefers-reduced-motion:reduce){.bub{display:none}.track{animation:none}}
+</style>
+</head>
+<body>
+<div id="prog" aria-hidden="true"></div>
+<a id="up" href="#top" aria-label="العودة للأعلى">⌃</a>
+<header id="hd"><div class="wrap bar">
+  <a class="brand" href="#top">دراو بنين الثانوية</a>
+  <button id="lang" type="button" aria-label="Switch to English">EN</button>
+  <nav aria-label="أقسام الموقع"><a href="#about">المدرسة</a><a href="#mission">رسالتنا</a><a href="#people">الإدارة</a><a href="#teachers" hidden>المعلمون</a><a href="#news">الأخبار</a><a href="#tools">الخدمات</a><a href="#gallery">المعرض</a><a class="pill" href="#contact">تواصل معنا</a></nav>
+  <button id="burger" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+</div></header>
+<div id="menu" class="menu" hidden role="dialog" aria-modal="true" aria-label="القائمة">
+  <i class="fl" style="width:240px;height:262px;background:#FFD58A;inset-inline-end:-60px;top:12%"></i>
+  <i class="fl" style="width:170px;height:186px;background:#C79BEF;inset-inline-start:-30px;bottom:8%;animation-delay:-4s"></i>
+  <div class="ml"></div>
+</div>
+
+<main>
+<div class="hero" id="top">
+  <div><small>تأسست عام ١٩٠٤</small><h1>دراو بنين الثانوية</h1><p>نبني جيلًا <b class="rw" id="rw"></b></p></div>
+  <button id="lang2" class="lang2" type="button" aria-label="Switch to English">EN</button>
+  <button id="burger2" class="burger2" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+  <a class="cue" href="#about" aria-label="انزل للأسفل">⌄</a>
+</div>
+
+<div class="ribbon" aria-hidden="true"><div class="track" id="trk"><span>الإبداع</span><span>التميز العلمي</span><span>الأخلاق</span><span>الانتماء</span><span>الريادة</span><span>التحول الرقمي</span></div></div>
+
+<section id="about"><div class="wrap">
+  <div class="t"><h2>عن المدرسة</h2></div>
+  <p class="about slide">مدرسة دراو بنين الثانوية في دراو بأسوان، تأسست عام ١٩٠٤. نعمل على بناء جيل من الشباب المبدع، والمتميز علميًا وأخلاقيًا، والقادر على مواكبة التحول الرقمي.</p>
+  <div class="dots">
+    <div class="dot d1 pop"><div><b id="yrs">١٢٢</b><span>عامًا من التعليم</span></div></div>
+    <div class="dot d2 pop" style="transition-delay:.12s"><div><b>١٩٠٤</b><span>سنة التأسيس</span></div></div>
+    <div class="dot d3 pop" style="transition-delay:.24s"><div><b>دراو</b><span>أسوان</span></div></div>
+  </div>
+</div></section>
+
+<section id="mission"><div class="wrap">
+  <div class="t"><h2>رسالتنا</h2><p>خمسة التزامات لتحقيق رؤيتنا.</p></div>
+  <article class="row"><div class="hex c1 pop">تطوير التعليم</div><p class="txt slide">تقديم بيئة تعليمية جاذبة ومتطورة تعتمد على الرقمنة والأساليب الحديثة لتنمية مهارات التفكير والابتكار.</p></article>
+  <article class="row"><div class="hex c2 pop">رعاية الموهوبين</div><p class="txt slide">دعم وتكريم الطلاب المتميزين في شتى المجالات العلمية، والرياضية، ومنصات الثقافة المالية والاستثمار.</p></article>
+  <article class="row"><div class="hex c3 pop">القيم والأخلاق</div><p class="txt slide">غرس القيم الأخلاقية، والروح الوطنية، والانتماء لدى الطلاب ليكونوا مواطنين صالحين وقادة في المستقبل.</p></article>
+  <article class="row"><div class="hex c4 pop">التنمية المهنية</div><p class="txt slide">الرفع المستمر لكفاءة المعلمين والإداريين لمواكبة أحدث الاستراتيجيات التربوية تحت إشراف الإدارة المدرسية.</p></article>
+  <article class="row"><div class="hex c5 pop">المشاركة المجتمعية</div><p class="txt slide">تفعيل الشراكة الحقيقية بين المدرسة وأولياء الأمور ومجلس الأمناء والمجتمع المحلي لضمان جودة العملية التعليمية.</p></article>
+</div></section>
+
+<div class="vision" id="vision">
+  <i class="fl" style="width:230px;height:250px;background:#FFD58A;inset-inline-end:-40px;top:-50px"></i>
+  <i class="fl" style="width:150px;height:164px;background:#C79BEF;inset-inline-start:5%;bottom:-40px;animation-delay:-4s"></i>
+  <div class="wrap" style="position:relative"><h2>رؤيتنا</h2>
+  <blockquote class="slide">الريادة في بناء جيل من الشباب المبدع، والمتميز علمياً وأخلاقياً، والقادر على مواكبة التحول الرقمي والمنافسة العالمية بما يخدم مجتمعه ووطنه.</blockquote></div>
+</div>
+
+<section id="people"><div class="wrap">
+  <div class="t"><h2>إدارة المدرسة</h2></div>
+  <div class="who">
+    <article class="card pop"><img src="images/people-1.webp" alt="الأستاذ مصطفى إسماعيل" width="480" height="565" loading="lazy" decoding="async"><div><small>مدير المدرسة</small><h3>الأستاذ مصطفى إسماعيل</h3></div></article>
+    <article class="card pop" style="transition-delay:.1s"><img src="images/people-2.webp" alt="الأستاذ عمر فاروق" width="480" height="565" loading="lazy" decoding="async"><div><small>نائب المدير</small><h3>الأستاذ عمر فاروق</h3></div></article>
+    <article class="card wide pop" style="transition-delay:.15s"><img src="images/school-sign.webp" alt="لافتة مدرسة دراو الثانوية بنين" width="1400" height="934" loading="lazy" decoding="async"><div class="sign"><small>شعارنا</small><b>تخريج شباب مبدع ونافع لوطنه</b></div></article>
+  </div>
+</div></section>
+
+<section id="teachers" hidden><div class="wrap"><div class="t"><h2>المعلمون</h2><p>معلمو المدرسة.</p></div><div class="tg" id="tgrid"></div></div></section>
+
+<section id="news" aria-labelledby="h-news"><div class="wrap">
+  <div class="t"><h2 id="h-news">أخبار المدرسة</h2><p>آخر ما يخص مدرستنا وطلابنا.</p></div>
+  <article class="news pop">
+    <div class="nb"><small>خبر</small><h3>من تعلُّم البرمجة إلى صناعة أثر حقيقي</h3><b class="who">الطالب عمر الحسين صلاح الدين دياب</b><p>تفخر مدرسة دراو الثانوية بنين بإنجازات ابنها المتميز عمر، الذي استطاع توظيف ما تعلّمه في البرمجة في تنفيذ مشروع رقمي يعكس إبداعه ومهاراته التقنية، ليكون نموذجًا مشرفًا للطلاب الموهوبين والمبدعين.</p></div>
+    <div class="cap">لقطات من التكريم والتقدير</div>
+    <div class="hon">
+      <img src="images/news-01.webp" alt="لقطة من تكريم الطالب عمر الحسين" width="520" height="924" loading="lazy" decoding="async">
+      <img src="images/news-02.webp" alt="لقطة من تكريم الطالب عمر الحسين" width="520" height="924" loading="lazy" decoding="async">
+      <img src="images/news-03.webp" alt="لقطة من تكريم الطالب عمر الحسين" width="760" height="510" loading="lazy" decoding="async">
+      <img src="images/news-04.webp" alt="لقطة من تكريم الطالب عمر الحسين" width="760" height="427" loading="lazy" decoding="async">
+      </div>
+  </article>
+  <article class="news pop">
+    <div class="nph">
+      <img class="pt" src="images/news-05.webp" alt="لقطة من لقاء الطالب مع عدد من المسؤولين في العلمين الجديدة" width="520" height="924" loading="lazy" decoding="async">
+      <img src="images/news-06.webp" alt="لقطة من لقاء الطالب مع عدد من المسؤولين في العلمين الجديدة" width="760" height="428" loading="lazy" decoding="async">
+      <img src="images/news-07.webp" alt="لقطة من لقاء الطالب مع عدد من المسؤولين في العلمين الجديدة" width="760" height="428" loading="lazy" decoding="async">
+      <img src="images/news-08.webp" alt="لقطة من لقاء الطالب مع عدد من المسؤولين في العلمين الجديدة" width="760" height="428" loading="lazy" decoding="async">
+    </div>
+    <div class="nb"><small>خبر</small><h3>إنجاز طلابي مشرّف بمدرسة دراو الثانوية بنين</h3>
+    <p>في حضورٍ يعكس تميّز أبناء المدرسة، التقى الطالب أحمد أسامة كيكي، أمين المدارس بمحافظة أسوان، بالدكتور محمد عبد اللطيف، وزير التربية والتعليم والتعليم الفني، والدكتور مصطفى مدبولي، رئيس مجلس الوزراء، وذلك خلال فعالية بمدينة العلمين الجديدة. تفخر المدرسة بأبنائها المتميزين، وتتمنى لهم دوام النجاح والتوفيق.</p></div>
+  </article>
+  <article class="news split pop">
+    <img src="images/news-honor.webp" alt="لقطة من تسليم دبوس الاتحاد للأستاذة سحر" width="640" height="853" loading="lazy" decoding="async">
+    <div class="nb"><small>خبر</small><h3>تسليم دبوس الاتحاد</h3><p>تسليم دبوس الاتحاد للأستاذة سحر، الأخصائية الاجتماعية بالمدرسة، تقديرًا لكون أمين اتحاد الطلاب بمدرستنا ممثلًا للطلاب على مستوى المديرية.</p></div>
+  </article>
+</div></section>
+
+<section id="tools"><div class="wrap">
+  <div class="t"><h2>الخدمات الرقمية</h2><p>أداة صغيرة للطلاب، لأن رؤيتنا مواكبة التحول الرقمي.</p></div>
+  <div class="calc pop">
+    <h3>حاسبة النسبة المئوية</h3>
+    <div class="cr hd"><span>المادة</span><span>الدرجة</span><span>من</span></div>
+    <div id="rows"></div>
+    <div class="acts"><button type="button" id="add">إضافة مادة</button><button type="button" id="reset">مسح</button></div>
+    <div class="res" aria-live="polite"><div><b id="sum">٠ / ٠</b><span>المجموع</span></div><div><b id="pct">٠٪</b><span>النسبة المئوية</span></div></div>
+    <div class="pbar" role="progressbar" aria-label="النسبة المئوية" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <div class="t"><h2>معرض المدرسة</h2><p>المزيد من الصور والفعاليات على صفحة المدرسة في فيسبوك.</p></div>
+  <div class="gal pop" role="img" aria-label="لقطة جماعية من داخل المدرسة"></div>
+</div></section>
+
+<section id="suggest"><div class="wrap">
+  <div class="t"><h2>اقتراحاتك تهمنا</h2><p>اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.</p></div>
+  <div class="sg"><input id="sgn" aria-label="اسمك (اختياري)" placeholder="اسمك (اختياري)" maxlength="60" autocomplete="name"><textarea id="sgm" rows="4" aria-label="اقتراحك" placeholder="اكتب اقتراحك هنا" maxlength="600"></textarea><button class="btn" id="sgb" type="button">إرسال الاقتراح</button><p id="sgs" role="status"></p></div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <div class="t"><h2>تواصل معنا</h2><p>دراو، أسوان.</p></div>
+  <div class="links"><a class="btn" href="https://www.facebook.com/draw.bnyn.althanwyt" target="_blank" rel="noopener">صفحة المدرسة على فيسبوك</a><a class="btn" href="https://maps.app.goo.gl/yMNLNnetNTwuz2i17" target="_blank" rel="noopener">افتح الموقع على الخريطة</a></div>
+</div></section>
+</main>
+
+<footer><div class="wrap"><b>دراو بنين الثانوية</b><small>دراو، أسوان · ©<span id="yr"> ٢٠٢٦</span></small><small>تصميم وتطوير: عمر الحسين صلاح الدين دياب</small></div></footer>
+
+<dialog id="lb" class="lb" aria-label="عرض الصورة"><button type="button" id="lbx" aria-label="إغلاق">✕</button><button type="button" id="lbL" aria-label="السابق">‹</button><button type="button" id="lbR" aria-label="التالي">›</button><figure><img alt=""><figcaption></figcaption></figure></dialog>
+<script>
+document.documentElement.classList.add("js");
+const hd=document.getElementById("hd");
+const upd=()=>hd.classList.toggle("on",scrollY>60);
+addEventListener("scroll",upd,{passive:true});upd();
+const root=document.documentElement,$=q=>document.querySelector(q);
+const loc=()=>root.lang==="en"?"en-US":"ar-EG";
+const fmt=n=>n.toLocaleString(loc(),{useGrouping:false}),y=new Date().getFullYear(),age=y-1904;
+document.getElementById("yr").textContent=" "+fmt(y);
+const yrs=document.getElementById("yrs");yrs.textContent=fmt(age);
+const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function count(){if(still)return;const t0=performance.now();(function k(t){const p=Math.min((t-t0)/1400,1);yrs.textContent=fmt(Math.round(age*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(k)})(t0)}
+
+/* محتوى الموقع: أضف المعلمين والصور هنا */
+/* ضع هنا وسيلة استلام الاقتراحات (واحدة تكفي): رابط Formspree أو رقم واتساب بالصيغة الدولية بدون + أو إيميل */
+const SITE={contact:{endpoint:"",whatsapp:"",email:""},teachers:[],gallery:[{src:"images/gallery-01.webp",caption:"من لحظات المدرسة وأنشطتها"},{src:"images/gallery-02.webp",caption:"داخل الفصل"},{src:"images/gallery-03.webp",caption:"تسليم شهادة في ساحة المدرسة"},{src:"images/gallery-04.webp",caption:"في ساحة المدرسة"},{src:"images/gallery-05.webp",caption:"الطلاب في ساحة المدرسة"},{src:"images/gallery-06.webp",caption:"داخل الفصل"},{src:"images/gallery-07.webp",caption:"داخل الفصل"}]};
+const mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.textContent=h;return e};
+if(SITE.teachers.length){$("#teachers").hidden=false;$('nav a[href="#teachers"]').hidden=false;SITE.teachers.forEach(t=>{const c=mk("article","card pop"),i=mk("img"),d=mk("div");i.src=t.photo;i.alt=t.name;i.loading="lazy";d.append(mk("small","",t.role||""),mk("h3","",t.name));c.append(i,d);$("#tgrid").append(c)})}
+if(SITE.gallery.length){const g=$(".gal");g.className="gg";g.removeAttribute("role");g.removeAttribute("aria-label");g.innerHTML="";
+ const f0=mk("figure","pop"),d0=mk("div","t0");d0.setAttribute("role","img");d0.setAttribute("aria-label","لقطة جماعية من داخل المدرسة");f0.append(d0);g.append(f0);
+ SITE.gallery.forEach(p=>{const f=mk("figure","pop"),i=mk("img");i.src=p.src;i.alt=p.caption||"";i.decoding="async";f.append(i);if(p.caption)f.append(mk("figcaption","",p.caption));g.append(f)})}
+/* الأخبار: أضف خبر جديد في SITE.news = [{date:"2026-10-31",title:"...",who:"...",text:"...",images:["data:..."],en:{title:"...",who:"...",text:"..."}}]
+   وهيظهر تلقائيًا ويترتب من الأحدث للأقدم. الأخبار القديمة تقدر تدّيها تاريخ بإضافة data-date="2026-10-31" على وسم article. */
+const nsec=$("#news .wrap");
+(SITE.news||[]).forEach(n=>{const a=mk("article","news pop"),b=mk("div","nb");a.dataset.date=n.date||"";
+ b.append(mk("small","","خبر"),mk("h3","",n.title));if(n.who)b.append(mk("b","who",n.who));if(n.text)b.append(mk("p","",n.text));a.append(b);
+ if(n.images&&n.images.length){const h=mk("div","hon");n.images.forEach(s=>{const i=mk("img");i.src=s;i.alt=n.title;i.loading="lazy";i.decoding="async";h.append(i)});a.append(h)}
+ nsec.append(a)});
+function renderDates(){nsec.querySelectorAll("article.news").forEach(a=>{const s=a.querySelector("small");if(!s)return;let tm=s.querySelector("time");if(!tm){tm=mk("time");s.append(tm)}
+ const d=a.dataset.date;if(!d){tm.textContent="";tm.removeAttribute("datetime");return}
+ const dt=new Date(d+"T00:00:00");tm.setAttribute("datetime",d);tm.textContent=isNaN(dt)?"":"· "+dt.toLocaleDateString(loc(),{year:"numeric",month:"long",day:"numeric"})})}
+[...nsec.querySelectorAll("article.news")].sort((a,b)=>{const x=a.dataset.date||"",y=b.dataset.date||"";return x===y?0:!x?1:!y?-1:y<x?-1:1}).forEach(a=>nsec.append(a));
+renderDates();
+/* ===== الوضع الليلي + مساعد المدرسة + الاقتراحات ===== */
+const L=(a,e)=>root.lang==="en"?e:a;
+const th=mk("button","","🌙");th.id="theme";th.type="button";th.setAttribute("aria-label","تبديل الوضع الليلي");
+function setTheme(d,save){root.dataset.theme=d?"dark":"light";th.textContent=d?"☀️":"🌙";if(save)try{localStorage.setItem("th",d?"d":"l")}catch(e){}}
+th.onclick=()=>setTheme(root.dataset.theme!=="dark",true);
+let sv=null;try{sv=localStorage.getItem("th")}catch(e){}
+setTheme(sv?sv==="d":matchMedia("(prefers-color-scheme: dark)").matches,false);
+const bt=mk("button","","💬");bt.id="bot";bt.type="button";bt.setAttribute("aria-label","اسأل مساعد المدرسة");bt.setAttribute("aria-expanded","false");bt.setAttribute("aria-controls","bp");
+const bp=mk("div");bp.id="bp";bp.hidden=true;bp.setAttribute("role","dialog");bp.setAttribute("aria-label","مساعد المدرسة");
+bp.innerHTML='<div class="bh"><b>مساعد دراو</b><small>ردود جاهزة عن المدرسة والموقع</small><button type="button" id="bx" aria-label="إغلاق">✕</button></div><div class="bm" id="bm" aria-live="polite"></div><div class="bc" id="bc"></div><div class="bi"><input id="bq" aria-label="اكتب سؤالك" placeholder="اكتب سؤالك هنا" maxlength="120" autocomplete="off"><button type="button" id="bs" aria-label="إرسال">➤</button></div>';
+document.body.append(th,bt,bp);
+const nz=s=>String(s).toLowerCase().replace(/[\u064B-\u0652\u0640]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\u0621-\u064Aa-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const KB=[
+{k:["مرحبا","اهلا","السلام","هاي","صباح الخير","مساء الخير","hello","hi","hey"],a:()=>L("أهلًا بيك! تحب تعرف إيه عن المدرسة؟","Hello! What would you like to know about the school?")},
+{k:["شكرا","تسلم","thanks","thank you"],a:()=>L("العفو! لو عندك سؤال تاني أنا موجود.","You're welcome! Ask me anything else.")},
+{k:["انت مين","مين انت","اسمك","who are you","your name"],a:()=>L("أنا مساعد دراو: برنامج صغير جوه الموقع بيرد بردود جاهزة عن المدرسة والموقع، وليس ذكاءً اصطناعيًا توليديًا.","I'm the Daraw assistant: a small program inside the site that gives ready-made answers about the school and the site. I'm not a generative AI.")},
+{k:["تاسس","تاسيس","1904","عمر المدرسه","قديمه","تاريخ","founded","history","how old","established"],go:"about",a:()=>L("المدرسة تأسست عام ١٩٠٤، يعني عمرها "+fmt(age)+" عامًا من التعليم.","The school was founded in 1904, so it has been educating for "+fmt(age)+" years.")},
+{k:["فين","مكان","عنوان","خريطه","where","location","address","map"],go:"contact",a:()=>L("المدرسة في دراو بمحافظة أسوان. تقدر تفتح موقعها على الخريطة من قسم تواصل معنا.","The school is in Daraw, Aswan. You can open its location on the map from the Contact section.")},
+{k:["مدير","المدير","مصطفي","اسماعيل","principal","headmaster"],go:"people",a:()=>L("مدير المدرسة هو الأستاذ مصطفى إسماعيل.","The school principal is Mr. Mostafa Ismail.")},
+{k:["نائب المدير","نائب","عمر فاروق","deputy","vice principal"],go:"people",a:()=>L("نائب المدير هو الأستاذ عمر فاروق.","The deputy principal is Mr. Omar Farouk.")},
+{k:["رؤي","vision"],go:"mission",a:()=>L("رؤيتنا: الريادة في بناء جيل من الشباب المبدع، المتميز علميًا وأخلاقيًا، والقادر على مواكبة التحول الرقمي والمنافسة العالمية بما يخدم مجتمعه ووطنه.","Our vision: leadership in building a generation of creative young people, distinguished in knowledge and ethics, able to keep pace with digital transformation and global competition, in service of their community and nation.")},
+{k:["رساله","التزام","التزامات","اهداف","mission","commitments"],go:"mission",a:()=>L("التزاماتنا الخمسة: تطوير التعليم، رعاية الموهوبين، القيم والأخلاق، التنمية المهنية، والمشاركة المجتمعية.","Our five commitments: developing education, nurturing the gifted, values and ethics, professional development, and community partnership.")},
+{k:["شعار","قيم","slogan","values","motto"],go:"people",a:()=>L("شعارنا: تخريج شباب مبدع ونافع لوطنه. وقيمنا: الإبداع، التميز العلمي، الأخلاق، الانتماء، الريادة، التحول الرقمي.","Our slogan: graduating creative youth who serve their nation. Our values: creativity, academic excellence, ethics, belonging, leadership, digital transformation.")},
+{k:["خبر","اخبار","news"],go:"news",a:()=>{const h=[...document.querySelectorAll("#news h3")].map(x=>"• "+x.textContent).join("\n");return L("أخبار المدرسة:\n"+h,"School news:\n"+h)}},
+{k:["احمد اسامه","كيكي","امين المدارس","العلمين","مدبولي","وزير","minister","ahmed","alamein"],go:"news",a:()=>L("الطالب أحمد أسامة كيكي، أمين المدارس بمحافظة أسوان، التقى وزير التربية والتعليم ورئيس مجلس الوزراء في العلمين الجديدة. التفاصيل في ركن الأخبار.","Student Ahmed Osama Keki, Aswan's schools secretary, met the Minister of Education and the Prime Minister in New Alamein. Details are in the news section.")},
+{k:["دبوس","سحر","اتحاد","pin","union"],go:"news",a:()=>L("تسلّمت الأستاذة سحر، الأخصائية الاجتماعية، دبوس الاتحاد تقديرًا لكون أمين اتحاد الطلاب ممثلًا للطلاب على مستوى المديرية.","Ms. Sahar, the social specialist, received the Union pin in recognition of the student union secretary representing students at the directorate level.")},
+{k:["تكريم","مكرم","كرم","honor","honored","honour"],go:"news",a:()=>L("تم تكريم الطالب عمر الحسين صلاح الدين دياب تقديرًا لتصميم وتطوير هذا الموقع. التفاصيل في ركن الأخبار.","Student Omar Al-Hussein Salah El-Din Diab was honored for designing and developing this site. Details are in the news section.")},
+{k:["عمل الموقع","صاحب الموقع","من صنع","صمم","مصمم","تصميم","مطور","تطوير","عمر الحسين","developer","designer","who made","who built","created"],a:()=>L("الموقع من تصميم وتطوير الطالب عمر الحسين صلاح الدين دياب.","The site was designed and developed by student Omar Al-Hussein Salah El-Din Diab.")},
+{k:["ذكاء اصطناعي","ذكاء","كلود","claude","chatgpt","ai","artificial intelligence","برمجه","كود","code","built with","تقنيات"],a:()=>L("الموقع مكتوب بـ HTML وCSS وJavaScript في ملف واحد. الفكرة والمحتوى والقرارات من عمر، واستعان بأدوات ذكاء اصطناعي في كتابة الكود.","The site is written in HTML, CSS and JavaScript in a single file. The idea, content and decisions are Omar's, and he used AI tools to help write the code.")},
+{k:["حاسبه","نسبه","مئويه","درجات","مجموع","calculator","percent","percentage","grades"],go:"tools",a:()=>L("في قسم الخدمات حاسبة نسبة مئوية: اكتب اسم المادة ودرجتك والدرجة النهائية، وهيطلع المجموع والنسبة تلقائيًا.","The Services section has a percentage calculator: enter the subject, your score and the maximum, and it shows the total and percentage automatically.")},
+{k:["صور","معرض","gallery","photos","pictures"],go:"gallery",a:()=>L("معرض المدرسة فيه صور من الفصول والساحة والشهادات. اضغط على أي صورة لتكبيرها.","The gallery has photos of classrooms, the schoolyard and certificates. Tap any photo to enlarge it.")},
+{k:["معلم","معلمين","مدرسين","teacher","teachers","staff"],a:()=>L("قسم المعلمين هيتضاف قريبًا.","The teachers section will be added soon.")},
+{k:["اقتراح","اقترح","شكوي","ملاحظه","suggest","suggestion","complaint","feedback"],go:"suggest",a:()=>L("يسعدنا نسمع رأيك! اكتب اقتراحك في النموذج.","We'd love to hear from you! Write your suggestion in the form.")},
+{k:["تواصل","فيسبوك","فيس","رقم","تليفون","موبايل","واتساب","contact","facebook","phone","whatsapp","call"],go:"contact",a:()=>L("تقدر تتابع المدرسة على فيسبوك من قسم تواصل معنا، أو تسيب اقتراحك في نموذج الاقتراحات. رقم التليفون لسه مش مضاف.","You can follow the school on Facebook from the Contact section, or leave a suggestion in the form. The phone number hasn't been added yet.")},
+{k:["انجليزي","english","لغه","language","عربي","ترجمه","translate"],a:()=>L("الموقع بالعربي والإنجليزي. اضغط زرار EN أعلى الصفحة للتبديل.","The site is available in Arabic and English. Use the button at the top of the page to switch.")},
+{k:["ليلي","dark","night","مظلم","theme"],act:()=>setTheme(root.dataset.theme!=="dark",true),a:()=>L("اتبدّل الوضع. تقدر ترجع بزرار القمر/الشمس جنب المساعد.","Theme switched. You can switch back with the moon/sun button next to the assistant.")},
+{k:["شارك","مشاركه","share","رابط الموقع"],act:()=>{const u=location.href.split("?")[0];if(navigator.share)navigator.share({title:document.title,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).catch(()=>{})},a:()=>L("جهّزت لك رابط الموقع للمشاركة.","I've prepared the site link for sharing.")}
+];
+KB.forEach(e=>e.k=e.k.map(nz));
+const hit=(q,k)=>(k.length<=3||/^[a-z0-9 ]+$/.test(k))?q.includes(" "+k+" "):q.includes(k);
+function find(s){const q=" "+nz(s)+" ";let b=null,m=0;KB.forEach(e=>{let sc=0;e.k.forEach(k=>{if(hit(q,k))sc+=k.length});if(sc>m){m=sc;b=e}});return b}
+const bm=$("#bm"),bc=$("#bc"),bq=$("#bq");
+function addMsg(txt,cls,go){const m=mk("div","m"+(cls?" "+cls:""),txt);if(go){const g=mk("button","",L("اذهب للقسم","Go to section"));g.type="button";g.onclick=()=>{bp.hidden=true;bt.setAttribute("aria-expanded","false");document.getElementById(go).scrollIntoView({behavior:still?"auto":"smooth"})};m.append(g)}bm.append(m);bm.scrollTop=bm.scrollHeight;return m}
+function chips(){bc.innerHTML="";(root.lang==="en"?["Who is the principal?","What's the latest news?","When was the school founded?","Who built the site?","How can I contact you?"]:["مين مدير المدرسة؟","إيه أخبار المدرسة؟","المدرسة اتأسست إمتى؟","مين عمل الموقع؟","إزاي أتواصل؟"]).forEach(s=>{const c=mk("button","",s);c.type="button";c.onclick=()=>ask(s);bc.append(c)})}
+function ask(s){s=(s||"").trim();if(!s)return;bq.value="";addMsg(s,"u");const e=find(s),w=addMsg("…","");
+ setTimeout(()=>{w.remove();if(e){if(e.act)e.act();addMsg(e.a(),"",e.go)}else addMsg(L("ما فهمتش سؤالك كويس. جرّب تسأل عن: المدير، الأخبار، تاريخ المدرسة، المعرض، أو التواصل.","I didn't quite get that. Try asking about: the principal, the news, school history, the gallery, or contact."),"");bm.scrollTop=bm.scrollHeight},still?0:450)}
+function openBot(o){bp.hidden=!o;bt.setAttribute("aria-expanded",o);if(o){if(!bm.children.length){addMsg(L("أهلًا! أنا مساعد دراو، بجاوب بردود جاهزة عن المدرسة والموقع. اسألني أو اختار سؤال:","Hi! I'm the Daraw assistant. I answer with ready-made replies about the school and the site. Ask me or pick a question:"),"")}chips();bq.focus()}}
+bt.onclick=()=>openBot(bp.hidden);$("#bx").onclick=()=>{openBot(false);bt.focus()};
+$("#bs").onclick=()=>ask(bq.value);bq.addEventListener("keydown",e=>{if(e.key==="Enter")ask(bq.value)});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!bp.hidden){openBot(false);bt.focus()}});
+const sgs=$("#sgs");
+$("#sgb").onclick=async()=>{const n=$("#sgn").value.trim(),m=$("#sgm").value.trim(),c=SITE.contact||{};
+ if(m.length<5){sgs.textContent=L("اكتب اقتراحك الأول (٥ حروف على الأقل).","Please write your suggestion first (at least 5 characters).");return}
+ const txt=(n?n+": ":"")+m;
+ try{
+  if(c.endpoint){const r=await fetch(c.endpoint,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({name:n,message:m})});if(!r.ok)throw 0;sgs.textContent=L("شكرًا! وصلنا اقتراحك.","Thank you! Your suggestion was sent.");$("#sgm").value=""}
+  else if(c.whatsapp){open("https://wa.me/"+c.whatsapp+"?text="+encodeURIComponent(txt),"_blank","noopener");sgs.textContent=L("اتفتحت الرسالة، اضغط إرسال علشان تكمل.","The message is ready, tap send to finish.")}
+  else if(c.email){location.href="mailto:"+c.email+"?subject="+encodeURIComponent("اقتراح من موقع المدرسة")+"&body="+encodeURIComponent(txt);sgs.textContent=L("اتفتحت الرسالة، اضغط إرسال علشان تكمل.","The message is ready, tap send to finish.")}
+  else{await navigator.clipboard.writeText(txt);sgs.textContent=L("الإرسال المباشر لسه مش مفعّل. اتنسخ اقتراحك، ابعته لصفحة المدرسة على فيسبوك.","Direct sending isn't enabled yet. Your text was copied; please send it to the school's Facebook page.")}
+ }catch(e){sgs.textContent=L("حصلت مشكلة، حاول تاني.","Something went wrong, please try again.")}};
+const hero=$(".hero");
+for(let i=0;i<11;i++){const b=mk("i","bub"),z=14+(i*37%48);b.style.cssText="width:"+z+"px;height:"+z+"px;left:"+(i*9+3)%96+"%;animation-duration:"+(11+i*5%9)+"s;animation-delay:-"+(i*3%11)+"s";hero.append(b)}
+const RW={ar:["مبدعًا","متميزًا علميًا","متميزًا أخلاقيًا","قادرًا على مواكبة التحول الرقمي"],en:["creative","distinguished in knowledge","distinguished in ethics","able to keep pace with digital change"]};
+let wi=0;const rw=$("#rw"),setW=()=>rw.textContent=RW[root.lang==="en"?"en":"ar"][wi];setW();
+if(!still)setInterval(()=>{rw.classList.add("o");setTimeout(()=>{wi=(wi+1)%4;setW();rw.classList.remove("o")},350)},2600);
+const trk=$("#trk");trk.innerHTML+=trk.innerHTML;
+const prog=$("#prog"),up=$("#up");let st=false;
+addEventListener("scroll",()=>{if(st)return;st=true;requestAnimationFrame(()=>{const h=root.scrollHeight-innerHeight;prog.style.transform="scaleX("+(h>0?scrollY/h:0)+")";up.classList.toggle("on",scrollY>700);st=false})},{passive:true});
+const f1=n=>n.toLocaleString(loc(),{maximumFractionDigits:1});
+const num=v=>{const n=parseFloat(String(v).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace("٫","."));return isNaN(n)?0:n};
+const rows=$("#rows");
+function addRow(){if(rows.children.length>=12)return;const r=mk("div","cr");r.innerHTML='<input aria-label="اسم المادة" placeholder="مثال: لغة عربية"><input class="s" inputmode="decimal" aria-label="الدرجة" placeholder="٠"><input class="x" inputmode="decimal" aria-label="الدرجة النهائية" value="١٠٠">';rows.append(r);if(root.lang==="en")walk(true)}
+function calc(){let s=0,x=0;rows.querySelectorAll(".cr").forEach(r=>{const v=r.querySelector(".s").value.trim(),m=num(r.querySelector(".x").value);if(v!==""&&m>0){s+=Math.min(num(v),m);x+=m}});const p=x?s/x*100:0;$("#sum").textContent=f1(s)+" / "+f1(x);$("#pct").textContent=f1(p)+(root.lang==="en"?"%":"٪");$("#fill").style.width=p+"%";$(".pbar").setAttribute("aria-valuenow",Math.round(p))}
+const init=()=>{rows.innerHTML="";for(let i=0;i<4;i++)addRow();calc()};
+rows.addEventListener("input",calc);$("#add").onclick=addRow;$("#reset").onclick=init;init();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add("in");if(e.target.contains(yrs))count();io.unobserve(e.target)}),{threshold:.25});
+document.querySelectorAll(".pop,.slide").forEach(el=>io.observe(el));
+const menu=$("#menu"),bg1=$("#burger"),bg2=$("#burger2");
+function setMenu(o){
+  if(o){const L=menu.querySelector(".ml");L.innerHTML="";[...document.querySelectorAll("nav a")].filter(a=>!a.hidden).forEach((a,i)=>{const l=mk("a","",a.textContent.trim());l.href=a.getAttribute("href");l.style.transitionDelay=(.05+i*.06)+"s";l.onclick=()=>setMenu(false);L.append(l)});
+    menu.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>menu.classList.add("open")));hd.classList.add("force");document.body.style.overflow="hidden"}
+  else{menu.classList.remove("open");hd.classList.remove("force");document.body.style.overflow="";setTimeout(()=>{if(!menu.classList.contains("open"))menu.hidden=true},320)}
+  bg1.setAttribute("aria-expanded",o);bg2.setAttribute("aria-expanded",o)}
+[bg1,bg2].forEach(b=>b.onclick=()=>setMenu(menu.hidden||!menu.classList.contains("open")));
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!menu.hidden)setMenu(false)});
+addEventListener("resize",()=>{if(innerWidth>1100&&!menu.hidden)setMenu(false)});
+const lb=$("#lb"),lbi=lb.querySelector("img"),lbc=lb.querySelector("figcaption"),IMG=".news img,.gg img,.who img";let lbs=[],lbk=0;
+function showLb(k){lbk=(k+lbs.length)%lbs.length;const i=lbs[lbk];lbi.src=i.src;lbi.alt=i.alt;lbc.textContent=i.alt;lb.classList.remove("zoom");lb.querySelector("figure").scrollTo(0,0)}
+document.addEventListener("click",e=>{const i=e.target.closest(IMG);if(!i)return;lbs=[...document.querySelectorAll(IMG)];showLb(lbs.indexOf(i));if(!lb.open)lb.showModal()});
+lbi.onclick=()=>lb.classList.toggle("zoom");
+$("#lbx").onclick=()=>lb.close();
+const rtl=()=>root.dir==="rtl";
+$("#lbL").onclick=()=>showLb(lbk+(rtl()?1:-1));$("#lbR").onclick=()=>showLb(lbk+(rtl()?-1:1));
+lb.addEventListener("click",e=>{if(e.target===lb)lb.close()});
+lb.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")showLb(lbk+(rtl()?1:-1));if(e.key==="ArrowRight")showLb(lbk+(rtl()?-1:1))});
+const EN={"عرض الصورة":"Image viewer","إغلاق":"Close","السابق":"Previous","التالي":"Next","من تعلُّم البرمجة إلى صناعة أثر حقيقي":"From learning programming to making a real impact","الطالب عمر الحسين صلاح الدين دياب":"Student Omar Al-Hussein Salah El-Din Diab","تفخر مدرسة دراو الثانوية بنين بإنجازات ابنها المتميز عمر، الذي استطاع توظيف ما تعلّمه في البرمجة في تنفيذ مشروع رقمي يعكس إبداعه ومهاراته التقنية، ليكون نموذجًا مشرفًا للطلاب الموهوبين والمبدعين.":"Daraw Boys' Secondary School is proud of the achievements of its outstanding student Omar, who was able to apply what he learned in programming to carry out a digital project that reflects his creativity and technical skills, setting a proud example for talented and creative students.","لقطات من التكريم والتقدير":"Moments from the honoring and appreciation","لقطة من تكريم الطالب عمر الحسين":"A moment from the honoring of student Omar Al-Hussein","من تعلُّم البرمجة إلى صناعة أثر حقيقي":"From learning programming to making a real impact","الطالب عمر الحسين صلاح الدين دياب":"Student Omar Al-Hussein Salah El-Din Diab","تفخر مدرسة دراو الثانوية بنين بإنجازات ابنها المتميز عمر، الذي استطاع توظيف ما تعلّمه في البرمجة في تنفيذ مشروع رقمي يعكس إبداعه ومهاراته التقنية، ليكون نموذجًا مشرفًا للطلاب الموهوبين والمبدعين.":"Daraw Boys' Secondary School is proud of the achievements of its outstanding student Omar, who was able to apply what he learned in programming to build a digital project that reflects his creativity and technical skills, setting an honorable example for gifted and creative students.","لقطات من التكريم والتقدير":"Moments from the honoring and appreciation","لقطة من تكريم الطالب":"A moment from the student's honoring","تسليم دبوس الاتحاد":"Presenting the Union pin","تسليم دبوس الاتحاد للأستاذة سحر، الأخصائية الاجتماعية بالمدرسة، تقديرًا لكون أمين اتحاد الطلاب بمدرستنا ممثلًا للطلاب على مستوى المديرية.":"Presenting the Union pin to Ms. Sahar, the school's social specialist, in appreciation of our school's Student Union Secretary representing students at the directorate level.","لقطة من تسليم دبوس الاتحاد للأستاذة سحر":"A moment from presenting the Union pin to Ms. Sahar","القائمة":"Menu","الأخبار":"News","أخبار المدرسة":"School News","آخر ما يخص مدرستنا وطلابنا.":"The latest about our school and students.","خبر":"News","إنجاز طلابي مشرّف بمدرسة دراو الثانوية بنين":"A proud student achievement at Daraw Boys' Secondary School","في حضورٍ يعكس تميّز أبناء المدرسة، التقى الطالب أحمد أسامة كيكي، أمين المدارس بمحافظة أسوان، بالدكتور محمد عبد اللطيف، وزير التربية والتعليم والتعليم الفني، والدكتور مصطفى مدبولي، رئيس مجلس الوزراء، وذلك خلال فعالية بمدينة العلمين الجديدة. تفخر المدرسة بأبنائها المتميزين، وتتمنى لهم دوام النجاح والتوفيق.":"In a presence that reflects the excellence of the school's students, student Ahmed Osama Keki, Schools Secretary of Aswan Governorate, met Dr. Mohamed Abdel Latif, Minister of Education and Technical Education, and Dr. Mostafa Madbouly, Prime Minister, during an event in New Alamein City. The school is proud of its outstanding students and wishes them continued success and prosperity.","{alt}":"A moment from the student's meeting with several officials in New Alamein","داخل الفصل":"Inside the classroom","تسليم شهادة في ساحة المدرسة":"A certificate presentation in the schoolyard","في ساحة المدرسة":"In the schoolyard","الطلاب في ساحة المدرسة":"Students in the schoolyard","نائب المدير":"Deputy Principal","الأستاذ عمر فاروق":"Mr. Omar Farouk","من لحظات المدرسة وأنشطتها":"Moments from school life and activities","دراو بنين الثانوية":"Daraw Boys' Secondary School","المدرسة":"School","رسالتنا":"Our Mission","الإدارة":"Leadership","المعلمون":"Teachers","الخدمات":"Services","المعرض":"Gallery","تواصل معنا":"Contact Us","انزل للأسفل":"Scroll down","العودة للأعلى":"Back to top",
+"تأسست عام ١٩٠٤":"Founded in 1904","نبني جيلًا":"We build a generation that is",
+"الإبداع":"Creativity","التميز العلمي":"Academic excellence","الأخلاق":"Ethics","الانتماء":"Belonging","الريادة":"Leadership","التحول الرقمي":"Digital transformation",
+"عن المدرسة":"About the School","مدرسة دراو بنين الثانوية في دراو بأسوان، تأسست عام ١٩٠٤. نعمل على بناء جيل من الشباب المبدع، والمتميز علميًا وأخلاقيًا، والقادر على مواكبة التحول الرقمي.":"Daraw Boys' Secondary School is in Daraw, Aswan, founded in 1904. We build a generation of creative young people, distinguished in knowledge and character, able to keep pace with digital transformation.",
+"عامًا من التعليم":"years of education","١٩٠٤":"1904","سنة التأسيس":"Founded","دراو":"Daraw","أسوان":"Aswan",
+"خمسة التزامات لتحقيق رؤيتنا.":"Five commitments to achieve our vision.",
+"تطوير التعليم":"Developing Education","تقديم بيئة تعليمية جاذبة ومتطورة تعتمد على الرقمنة والأساليب الحديثة لتنمية مهارات التفكير والابتكار.":"Providing an attractive, advanced learning environment built on digitization and modern methods to develop thinking and innovation skills.",
+"رعاية الموهوبين":"Nurturing the Gifted","دعم وتكريم الطلاب المتميزين في شتى المجالات العلمية، والرياضية، ومنصات الثقافة المالية والاستثمار.":"Supporting and honoring outstanding students across science, sports, and platforms for financial literacy and investment.",
+"القيم والأخلاق":"Values and Ethics","غرس القيم الأخلاقية، والروح الوطنية، والانتماء لدى الطلاب ليكونوا مواطنين صالحين وقادة في المستقبل.":"Instilling ethical values, patriotism, and belonging so that students become good citizens and future leaders.",
+"التنمية المهنية":"Professional Development","الرفع المستمر لكفاءة المعلمين والإداريين لمواكبة أحدث الاستراتيجيات التربوية تحت إشراف الإدارة المدرسية.":"Continuously raising the competence of teachers and administrators to keep up with the latest educational strategies, under school management supervision.",
+"المشاركة المجتمعية":"Community Partnership","تفعيل الشراكة الحقيقية بين المدرسة وأولياء الأمور ومجلس الأمناء والمجتمع المحلي لضمان جودة العملية التعليمية.":"Activating a real partnership between the school, parents, the board of trustees, and the local community to ensure educational quality.",
+"رؤيتنا":"Our Vision","الريادة في بناء جيل من الشباب المبدع، والمتميز علمياً وأخلاقياً، والقادر على مواكبة التحول الرقمي والمنافسة العالمية بما يخدم مجتمعه ووطنه.":"Leadership in building a generation of creative young people, distinguished in knowledge and ethics, able to keep pace with digital transformation and global competition, in service of their community and nation.",
+"إدارة المدرسة":"School Leadership","مدير المدرسة":"School Principal","الأستاذ مصطفى إسماعيل":"Mr. Mostafa Ismail","لافتة مدرسة دراو الثانوية بنين":"Daraw Boys' Secondary School sign","شعارنا":"Our slogan","تخريج شباب مبدع ونافع لوطنه":"Graduating creative youth who serve their nation",
+"معلمو المدرسة.":"Our teachers.","الخدمات الرقمية":"Digital Services","أداة صغيرة للطلاب، لأن رؤيتنا مواكبة التحول الرقمي.":"A small tool for students, because our vision is keeping pace with digital transformation.","حاسبة النسبة المئوية":"Percentage Calculator","المادة":"Subject","الدرجة":"Score","من":"Out of","إضافة مادة":"Add subject","مسح":"Clear","المجموع":"Total","النسبة المئوية":"Percentage","مثال: لغة عربية":"e.g. Arabic","اسم المادة":"Subject name","الدرجة النهائية":"Maximum score","٠":"0",
+"معرض المدرسة":"School Gallery","المزيد من الصور والفعاليات على صفحة المدرسة في فيسبوك.":"More photos and events on the school's Facebook page.","لقطة جماعية من داخل المدرسة":"Group photo inside the school",
+"دراو، أسوان.":"Daraw, Aswan.","صفحة المدرسة على فيسبوك":"School Facebook page","افتح الموقع على الخريطة":"Open on map","دراو، أسوان · ©":"Daraw, Aswan · ©","تصميم وتطوير: عمر الحسين صلاح الدين دياب":"Designed & developed by Omar Al-Hussein Salah El-Din Diab","أقسام الموقع":"Site sections"};
+(SITE.news||[]).forEach(n=>{if(!n.en)return;[["title"],["who"],["text"]].forEach(([k])=>{if(n[k]&&n.en[k])EN[n[k]]=n.en[k]})});
+Object.assign(EN,{"اقتراحاتك تهمنا":"Your suggestions matter","اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.":"Write your suggestion or feedback about the school or the site.","اسمك (اختياري)":"Your name (optional)","اكتب اقتراحك هنا":"Write your suggestion here","اقتراحك":"Your suggestion","إرسال الاقتراح":"Send suggestion","مساعد دراو":"Daraw Assistant","ردود جاهزة عن المدرسة والموقع":"Ready answers about the school and the site","اكتب سؤالك هنا":"Type your question here","اكتب سؤالك":"Your question","إرسال":"Send","اسأل مساعد المدرسة":"Ask the school assistant","مساعد المدرسة":"School assistant","تبديل الوضع الليلي":"Toggle dark mode"});
+const orig=new WeakMap(),AT=["alt","aria-label","placeholder"];
+function walk(en){
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+  while(n=w.nextNode()){
+    if(n.parentElement.closest("script,style"))continue;
+    if(!orig.has(n)){const t=n.nodeValue.trim();if(!(t in EN))continue;orig.set(n,n.nodeValue)}
+    const o=orig.get(n),t=o.trim();n.nodeValue=en?o.replace(t,EN[t]):o}
+  document.querySelectorAll("[alt],[aria-label],[placeholder]").forEach(el=>AT.forEach(a=>{
+    const v=el.getAttribute(a);if(v===null)return;const o=orig.get(el)||{},k=a in o?o[a]:v;if(!(k in EN))return;
+    o[a]=k;orig.set(el,o);el.setAttribute(a,en?EN[k]:k)}))}
+const dig=s=>root.lang==="en"?s.replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)):s.replace(/[0-9]/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+function setLang(en){
+  root.lang=en?"en":"ar";root.dir=en?"ltr":"rtl";
+  document.title=en?"Daraw Boys' Secondary School":"دراو بنين الثانوية";
+  walk(en);renderDates();yrs.textContent=fmt(age);$("#yr").textContent=" "+fmt(y);setW();
+  rows.querySelectorAll(".s,.x").forEach(i=>i.value=dig(i.value));calc();
+  document.querySelectorAll("#lang,#lang2").forEach(b=>{b.textContent=en?"عربي":"EN";b.setAttribute("aria-label",en?"التبديل إلى العربية":"Switch to English")})}
+document.querySelectorAll("#lang,#lang2").forEach(b=>b.onclick=()=>setLang(root.lang!=="en"));
+if(new URLSearchParams(location.search).get("lang")==="en")setLang(true);
+</script>
+</body>
+</html>
