@@ -39,7 +39,12 @@ async function hmac(key,msg){const k=await crypto.subtle.importKey("raw",enc.enc
 async function same(a,b){const[x,y]=await Promise.all([hmac("cmp",a),hmac("cmp",b)]);let d=0;for(let i=0;i<x.length;i++)d|=x[i]^y[i];return d===0}
 const key=env=>env.SESSION_SECRET||env.ADMIN_PASSWORD||"";
 async function token(env,role){const p=role+"."+(Date.now()+288e5);return p+"."+hex(await hmac(key(env),p))}
-async function roleOf(req,env){const m=/(?:^|; )sess=([^;]+)/.exec(req.headers.get("cookie")||"");if(!m||!key(env))return null;const[r,e,g]=m[1].split(".");if(!g||+e<Date.now()||(r!=="admin"&&r!=="viewer"))return null;return await same(g,hex(await hmac(key(env),r+"."+e)))?r:null}
+async function roleOf(req,env){const m=/(?:^|; )sess=([^;]+)/.exec(req.headers.get("cookie")||"");if(!m||!key(env))return null;const[r,e,g]=m[1].split(".");if(!g||+e<Date.now()||(r!=="admin"&&r!=="viewer"&&!/^t\d+$/.test(r)))return null;
+ if(!await same(g,hex(await hmac(key(env),r+"."+e))))return null;if(r[0]!=="t")return{role:r};
+ const t=await env.DB.prepare("SELECT id,name,active FROM teachers WHERE id=?").bind(+r.slice(1)).first();return t&&t.active?{role:"teacher",tid:t.id,name:t.name}:null}
+const hashCode=async c=>hex(new Uint8Array(await crypto.subtle.digest("SHA-256",enc.encode("daraw:"+c))));
+const normCode=c=>String(c||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+function newCode(){const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789",r=crypto.getRandomValues(new Uint8Array(12));const c=[...r].map(b=>A[b%A.length]).join("");return c.slice(0,4)+"-"+c.slice(4,8)+"-"+c.slice(8)}
 const ipid=async(req,env)=>hex(await hmac(key(env)||"x",req.headers.get("cf-connecting-ip")||"local")).slice(0,16);
 async function limited(DB,kind,ip,max,win){await DB.prepare("DELETE FROM events WHERE ts<?").bind(Date.now()-864e5).run();const r=await DB.prepare("SELECT COUNT(*) c FROM events WHERE kind=? AND ip=? AND ts>?").bind(kind,ip,Date.now()-win).first();return r.c>=max}
 const hit=(DB,kind,ip)=>DB.prepare("INSERT INTO events(kind,ip,ts) VALUES(?,?,?)").bind(kind,ip,Date.now()).run();
@@ -54,7 +59,11 @@ async function init(DB){if(ready)return;
   DB.prepare("CREATE TABLE IF NOT EXISTS agenda(id INTEGER PRIMARY KEY AUTOINCREMENT,kind TEXT DEFAULT 'event',title TEXT NOT NULL,body TEXT DEFAULT '',date TEXT,en TEXT DEFAULT '{}',created_at INTEGER)"),
   DB.prepare("CREATE TABLE IF NOT EXISTS honor(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,achievement TEXT DEFAULT '',image TEXT DEFAULT '',en TEXT DEFAULT '{}',created_at INTEGER)"),
   DB.prepare("CREATE TABLE IF NOT EXISTS polls(id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT NOT NULL,options TEXT NOT NULL,active INTEGER DEFAULT 1,en TEXT DEFAULT '{}',created_at INTEGER)"),
-  DB.prepare("CREATE TABLE IF NOT EXISTS votes(poll_id INTEGER,voter TEXT,opt INTEGER,ts INTEGER,PRIMARY KEY(poll_id,voter))")]);
+  DB.prepare("CREATE TABLE IF NOT EXISTS votes(poll_id INTEGER,voter TEXT,opt INTEGER,ts INTEGER,PRIMARY KEY(poll_id,voter))"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS teachers(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,subject TEXT DEFAULT '',code_hash TEXT,active INTEGER DEFAULT 1,created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS materials(id INTEGER PRIMARY KEY AUTOINCREMENT,grade TEXT,subject TEXT,title TEXT NOT NULL,url TEXT,kind TEXT,note TEXT DEFAULT '',teacher_id INTEGER DEFAULT 0,teacher_name TEXT DEFAULT '',created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS quizzes(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT NOT NULL,grade TEXT,subject TEXT,questions TEXT,active INTEGER DEFAULT 1,teacher_id INTEGER DEFAULT 0,teacher_name TEXT DEFAULT '',created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS attempts(id INTEGER PRIMARY KEY AUTOINCREMENT,quiz_id INTEGER,score INTEGER,total INTEGER,answers TEXT,ts INTEGER)")]);
  await DB.batch([...SEED.slice().reverse().map(n=>DB.prepare("INSERT INTO news(title,who,body,date,images,en,created_at) SELECT ?,?,?,'',?,'{}',? WHERE NOT EXISTS(SELECT 1 FROM meta WHERE k='seeded')").bind(n.title,n.who,n.body,JSON.stringify(n.images),Date.now())),DB.prepare("INSERT OR IGNORE INTO meta VALUES('seeded','1')")]);
  ready=true}
 const row=r=>({id:r.id,title:r.title,who:r.who,text:r.body,date:r.date,images:pj(r.images,[]),en:pj(r.en,{})});
@@ -79,28 +88,69 @@ const RES={
 async function list(DB,r,all){const q="SELECT * FROM "+r+(r==="polls"&&!all?" WHERE active=1":"")+" ORDER BY "+RES[r].o,rows=(await DB.prepare(q).all()).results,cnt={};
  if(r==="polls")(await DB.prepare("SELECT poll_id,opt,COUNT(*) c FROM votes GROUP BY poll_id,opt").all()).results.forEach(z=>{(cnt[z.poll_id]=cnt[z.poll_id]||{})[z.opt]=z.c});
  return rows.map(x=>{const o={...x,en:pj(x.en,{})};delete o.created_at;if(r==="polls"){o.options=pj(x.options,[]);o.counts=o.options.map((_,i)=>(cnt[x.id]||{})[i]||0)}return o})}
+const gr=v=>["0","1","2","3"].includes(String(v))?String(v):"0";
+function cleanMat(b){const title=s(b.title,150),u=s(b.url,500);if(!title||!/^https:\/\/[^\s]+$/.test(u))return null;return{grade:gr(b.grade),subject:s(b.subject,60),title,url:u,kind:["video","pdf","link"].includes(b.kind)?b.kind:"link",note:s(b.note,300)}}
+function cleanQuiz(b){const raw=Array.isArray(b.questions)?b.questions.slice(0,20):[],title=s(b.title,150);
+ const qs=raw.map(x=>({q:s(x&&x.q,300),options:(Array.isArray(x&&x.options)?x.options:[]).map(o=>s(o,120)).filter(Boolean).slice(0,5),correct:Number(x&&x.correct)})).filter(x=>x.q&&x.options.length>=2&&Number.isInteger(x.correct)&&x.correct>=0&&x.correct<x.options.length);
+ if(!title||!qs.length||qs.length!==raw.length)return null;return{title,grade:gr(b.grade),subject:s(b.subject,60),questions:JSON.stringify(qs),active:b.active===0||b.active===false?0:1}}
 async function route(req,env,ctx,u,p){const m=req.method,DB=env.DB;let x;
  if(m==="GET"&&(x=/^\/img\/(\d+)$/.exec(p)))return img(DB,+x[1],req,ctx);
  if(m==="GET"&&p==="/api/news"){const{results}=await DB.prepare("SELECT * FROM news ORDER BY date DESC,id DESC").all();return J({news:results.map(row)})}
  if(m==="GET"&&(x=/^\/api\/(agenda|honor|polls)$/.exec(p)))return J({items:await list(DB,x[1],false)});
+ if(m==="GET"&&p==="/api/materials"){const{results}=await DB.prepare("SELECT id,grade,subject,title,url,kind,note,teacher_name FROM materials ORDER BY id DESC LIMIT 300").all();return J({items:results})}
+ if(m==="GET"&&p==="/api/quizzes"){const{results}=await DB.prepare("SELECT id,title,grade,subject,teacher_name,questions FROM quizzes WHERE active=1 ORDER BY id DESC").all();return J({items:results.map(r=>({id:r.id,title:r.title,grade:r.grade,subject:r.subject,teacher_name:r.teacher_name,count:pj(r.questions,[]).length}))})}
+ if(m==="GET"&&(x=/^\/api\/quizzes\/(\d+)$/.exec(p))){const r=await DB.prepare("SELECT id,title,questions FROM quizzes WHERE id=? AND active=1").bind(+x[1]).first();if(!r)return J({error:"not-found"},404);return J({id:r.id,title:r.title,questions:pj(r.questions,[]).map(q=>({q:q.q,options:q.options}))})}
  const body=m==="GET"||m==="DELETE"?{}:await req.json().catch(()=>({}));
  if(m==="POST"&&p==="/api/vote"){const id=+body.poll,opt=+body.opt,tok=s(body.token,40);if(!/^[A-Za-z0-9]{16,40}$/.test(tok))return J({error:"token"},400);
   const pl=await DB.prepare("SELECT options,active FROM polls WHERE id=?").bind(id).first(),n=pl?pj(pl.options,[]).length:0;if(!pl||!pl.active||!(opt>=0&&opt<n))return J({error:"invalid"},400);
   const ip=await ipid(req,env);if(await limited(DB,"vote",ip,200,36e5))return J({error:"rate"},429);
   const r=await DB.prepare("INSERT OR IGNORE INTO votes(poll_id,voter,opt,ts) VALUES(?,?,?,?)").bind(id,tok,opt,Date.now()).run();await hit(DB,"vote",ip);return J({ok:true,duplicate:r.meta.changes===0})}
+ if(m==="POST"&&(x=/^\/api\/quizzes\/(\d+)\/submit$/.exec(p))){const qz=await DB.prepare("SELECT questions FROM quizzes WHERE id=? AND active=1").bind(+x[1]).first();if(!qz)return J({error:"not-found"},404);
+  const ip=await ipid(req,env);if(await limited(DB,"quiz",ip,150,36e5))return J({error:"rate"},429);
+  const qs=pj(qz.questions,[]),a=(Array.isArray(body.answers)?body.answers:[]).slice(0,qs.length).map(Number);let sc=0;
+  const results=qs.map((q,i)=>{const ok=a[i]===q.correct;if(ok)sc++;return{correct:q.correct,chosen:Number.isInteger(a[i])?a[i]:-1}});
+  await DB.prepare("INSERT INTO attempts(quiz_id,score,total,answers,ts) VALUES(?,?,?,?,?)").bind(+x[1],sc,qs.length,JSON.stringify(results.map(r=>r.chosen)),Date.now()).run();await hit(DB,"quiz",ip);return J({score:sc,total:qs.length,results})}
  if(m==="POST"&&p==="/api/suggest"){if(body.website)return J({ok:true});const msg=s(body.message,600);if(msg.length<5)return J({error:"short"},400);
   const ip=await ipid(req,env);if(await limited(DB,"sug",ip,5,36e5))return J({error:"rate"},429);
   await DB.prepare("INSERT INTO suggestions(name,message,created_at) VALUES(?,?,?)").bind(s(body.name,60),msg,Date.now()).run();await hit(DB,"sug",ip);return J({ok:true})}
  if(m==="POST"&&p==="/api/login"){if(!key(env))return J({error:"not-configured"},503);const ip=await ipid(req,env);if(await limited(DB,"login",ip,5,9e5))return J({error:"rate"},429);
-  const pw=s(body.password,200);let role=null;if(pw&&await same(pw,env.ADMIN_PASSWORD||"\u0000"))role="admin";else if(pw&&env.DEMO_PASSWORD&&await same(pw,env.DEMO_PASSWORD))role="viewer";
+  const pw=s(body.password,200);let role=null,tid=0;if(pw&&await same(pw,env.ADMIN_PASSWORD||"\u0000"))role="admin";else if(pw&&env.DEMO_PASSWORD&&await same(pw,env.DEMO_PASSWORD))role="viewer";
+  else if(pw){const c=normCode(pw),tr=c.length===12?await DB.prepare("SELECT id FROM teachers WHERE code_hash=? AND active=1").bind(await hashCode(c)).first():null;if(tr){role="teacher";tid=tr.id}}
   if(!role){await hit(DB,"login",ip);return J({error:"bad"},401)}
-  return J({role},200,{"set-cookie":"sess="+await token(env,role)+"; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=28800"})}
+  return J({role},200,{"set-cookie":"sess="+await token(env,role==="teacher"?"t"+tid:role)+"; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=28800"})}
  if(m==="POST"&&p==="/api/logout")return J({ok:true},200,{"set-cookie":"sess=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0"});
  if(!p.startsWith("/api/admin/"))return J({error:"not-found"},404);
- const role=await roleOf(req,env);if(!role)return J({error:"auth"},401);
- if(m!=="GET"){if(role!=="admin")return J({error:"view-only"},403);const o=req.headers.get("origin");if(o&&new URL(o).host!==u.host)return J({error:"origin"},403)}
- if(m==="GET"&&p==="/api/admin/me")return J({role});
- if(m==="GET"&&p==="/api/admin/stats"){const c=async q=>(await DB.prepare(q).first()).c;return J({news:await c("SELECT COUNT(*) c FROM news"),suggestions:await c("SELECT COUNT(*) c FROM suggestions"),newSuggestions:await c("SELECT COUNT(*) c FROM suggestions WHERE status='new'"),images:await c("SELECT COUNT(*) c FROM images"),events:await c("SELECT COUNT(*) c FROM agenda"),honor:await c("SELECT COUNT(*) c FROM honor"),polls:await c("SELECT COUNT(*) c FROM polls"),votes:await c("SELECT COUNT(*) c FROM votes")})}
+ const ses=await roleOf(req,env);if(!ses)return J({error:"auth"},401);const role=ses.role,tid=ses.tid||0,tname=role==="teacher"?ses.name:"الإدارة";
+ if(role==="teacher"&&!/^\/api\/admin\/(me|image|materials|quizzes|quiz-stats)(\/|$)/.test(p))return J({error:"forbidden"},403);
+ if(m!=="GET"){if(role==="viewer")return J({error:"view-only"},403);const o=req.headers.get("origin");if(o&&new URL(o).host!==u.host)return J({error:"origin"},403)}
+ if(m==="GET"&&p==="/api/admin/me")return J({role,name:role==="teacher"?ses.name:""});
+ const own=o=>role==="admin"||o.teacher_id===tid;
+ if(p==="/api/admin/teachers"||/^\/api\/admin\/teachers\/\d+(\/reset)?$/.test(p)){
+  if(m==="GET"&&p==="/api/admin/teachers"){const{results}=await DB.prepare("SELECT id,name,subject,active FROM teachers ORDER BY id DESC").all();return J({items:results})}
+  if(m==="POST"&&p==="/api/admin/teachers"){const n=s(body.name,80);if(!n)return J({error:"invalid"},400);const c=newCode(),r=await DB.prepare("INSERT INTO teachers(name,subject,code_hash,created_at) VALUES(?,?,?,?)").bind(n,s(body.subject,60),await hashCode(normCode(c)),Date.now()).run();return J({id:r.meta.last_row_id,code:c})}
+  if((x=/^\/api\/admin\/teachers\/(\d+)\/reset$/.exec(p))&&m==="POST"){const c=newCode();await DB.prepare("UPDATE teachers SET code_hash=?,active=1 WHERE id=?").bind(await hashCode(normCode(c)),+x[1]).run();return J({code:c})}
+  if((x=/^\/api\/admin\/teachers\/(\d+)$/.exec(p))){if(m==="PATCH"){await DB.prepare("UPDATE teachers SET active=? WHERE id=?").bind(body.active?1:0,+x[1]).run();return J({ok:true})}
+   if(m==="DELETE"){await DB.prepare("DELETE FROM teachers WHERE id=?").bind(+x[1]).run();return J({ok:true})}}
+  return J({error:"not-found"},404)}
+ if((x=/^\/api\/admin\/materials(?:\/(\d+))?$/.exec(p))){const id=x[1]&&+x[1];
+  if(m==="GET"&&!id){const{results}=await DB.prepare("SELECT * FROM materials ORDER BY id DESC LIMIT 300").all();return J({items:results.map(r=>({...r,mine:own(r)}))})}
+  const c=m==="DELETE"?{}:cleanMat(body);if(!c)return J({error:"invalid"},400);
+  if(m==="POST"&&!id){const r=await DB.prepare("INSERT INTO materials(grade,subject,title,url,kind,note,teacher_id,teacher_name,created_at) VALUES(?,?,?,?,?,?,?,?,?)").bind(c.grade,c.subject,c.title,c.url,c.kind,c.note,tid,tname,Date.now()).run();return J({id:r.meta.last_row_id})}
+  const old=id&&await DB.prepare("SELECT teacher_id FROM materials WHERE id=?").bind(id).first();if(!old)return J({error:"not-found"},404);if(!own(old))return J({error:"forbidden"},403);
+  if(m==="PUT"){await DB.prepare("UPDATE materials SET grade=?,subject=?,title=?,url=?,kind=?,note=? WHERE id=?").bind(c.grade,c.subject,c.title,c.url,c.kind,c.note,id).run();return J({ok:true})}
+  if(m==="DELETE"){await DB.prepare("DELETE FROM materials WHERE id=?").bind(id).run();return J({ok:true})}}
+ if((x=/^\/api\/admin\/quizzes(?:\/(\d+))?$/.exec(p))){const id=x[1]&&+x[1];
+  if(m==="GET"&&!id){const{results}=await DB.prepare("SELECT q.*,(SELECT COUNT(*) FROM attempts a WHERE a.quiz_id=q.id) attempts FROM quizzes q ORDER BY q.id DESC").all();return J({items:results.filter(r=>role!=="teacher"||own(r)).map(r=>({...r,questions:pj(r.questions,[]),mine:own(r)}))})}
+  const c=m==="DELETE"?{}:cleanQuiz(body);if(!c)return J({error:"invalid"},400);
+  if(m==="POST"&&!id){const r=await DB.prepare("INSERT INTO quizzes(title,grade,subject,questions,active,teacher_id,teacher_name,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(c.title,c.grade,c.subject,c.questions,c.active,tid,tname,Date.now()).run();return J({id:r.meta.last_row_id})}
+  const old=id&&await DB.prepare("SELECT teacher_id FROM quizzes WHERE id=?").bind(id).first();if(!old)return J({error:"not-found"},404);if(!own(old))return J({error:"forbidden"},403);
+  if(m==="PUT"){await DB.prepare("UPDATE quizzes SET title=?,grade=?,subject=?,questions=?,active=? WHERE id=?").bind(c.title,c.grade,c.subject,c.questions,c.active,id).run();await DB.prepare("DELETE FROM attempts WHERE quiz_id=?").bind(id).run();return J({ok:true})}
+  if(m==="DELETE"){await DB.prepare("DELETE FROM quizzes WHERE id=?").bind(id).run();await DB.prepare("DELETE FROM attempts WHERE quiz_id=?").bind(id).run();return J({ok:true})}}
+ if(m==="GET"&&p==="/api/admin/quiz-stats"){const id=+u.searchParams.get("id"),qz=await DB.prepare("SELECT title,questions,teacher_id FROM quizzes WHERE id=?").bind(id).first();if(!qz)return J({error:"not-found"},404);if(!own(qz))return J({error:"forbidden"},403);
+  const qs=pj(qz.questions,[]),{results}=await DB.prepare("SELECT score,total,answers FROM attempts WHERE quiz_id=? ORDER BY id DESC LIMIT 500").bind(id).all(),n=results.length,ok=qs.map(()=>0);let sum=0;
+  results.forEach(r=>{sum+=r.total?r.score/r.total:0;pj(r.answers,[]).forEach((a,i)=>{if(qs[i]&&a===qs[i].correct)ok[i]++})});
+  return J({title:qz.title,attempts:n,avg:n?Math.round(sum*100/n):0,questions:qs.map((q,i)=>({q:q.q,pct:n?Math.round(ok[i]*100/n):0}))})}
+ if(m==="GET"&&p==="/api/admin/stats"){const c=async q=>(await DB.prepare(q).first()).c;return J({news:await c("SELECT COUNT(*) c FROM news"),suggestions:await c("SELECT COUNT(*) c FROM suggestions"),newSuggestions:await c("SELECT COUNT(*) c FROM suggestions WHERE status='new'"),images:await c("SELECT COUNT(*) c FROM images"),events:await c("SELECT COUNT(*) c FROM agenda"),honor:await c("SELECT COUNT(*) c FROM honor"),polls:await c("SELECT COUNT(*) c FROM polls"),votes:await c("SELECT COUNT(*) c FROM votes"),materials:await c("SELECT COUNT(*) c FROM materials"),quizzes:await c("SELECT COUNT(*) c FROM quizzes"),attempts:await c("SELECT COUNT(*) c FROM attempts"),teachers:await c("SELECT COUNT(*) c FROM teachers")})}
  if(m==="GET"&&p==="/api/admin/suggestions"){const{results}=await DB.prepare("SELECT * FROM suggestions ORDER BY id DESC LIMIT 200").all();return J({items:results})}
  if((x=/^\/api\/admin\/(agenda|honor|polls)(?:\/(\d+))?$/.exec(p))){const r=x[1],id=x[2]&&+x[2];
   if(m==="GET"&&!id)return J({items:await list(DB,r,true)});
