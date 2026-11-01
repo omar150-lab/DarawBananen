@@ -1,0 +1,33 @@
+{
+ "name": "لوحة إدارة دراو",
+ "short_name": "إدارة دراو",
+ "description": "لوحة إدارة أخبار وإعلانات مدرسة دراو",
+ "lang": "ar",
+ "dir": "rtl",
+ "start_url": "/admin.html",
+ "scope": "/admin.html",
+ "display": "standalone",
+ "orientation": "portrait",
+ "theme_color": "#0A3D36",
+ "background_color": "#F3F8F6",
+ "icons": [
+  {
+   "src": "/icons/admin-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "/icons/admin-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "/icons/admin-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

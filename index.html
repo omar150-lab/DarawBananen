@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>دراو بنين الثانوية</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/favicon.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="دراو بنين">
+<meta property="og:type" content="website"><meta property="og:locale" content="ar_AR"><meta property="og:site_name" content="دراو بنين الثانوية">
+<meta property="og:title" content="دراو بنين الثانوية | الموقع الرسمي"><meta property="og:description" content="مدرسة دراو بنين الثانوية في أسوان، تأسست عام ١٩٠٤. أخبار المدرسة وإعلاناتها ولوحة الشرف والخدمات الرقمية.">
+<meta property="og:url" content="https://darawbananen.mmore8469.workers.dev/"><meta property="og:image" content="https://darawbananen.mmore8469.workers.dev/images/cover.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://darawbananen.mmore8469.workers.dev/images/cover.jpg">
 <meta name="description" content="الموقع الرسمي لمدرسة دراو بنين الثانوية في أسوان، تأسست عام ١٩٠٤.">
 <meta name="author" content="عمر الحسين صلاح الدين دياب">
 <meta name="theme-color" content="#0E7C6B">
@@ -411,6 +419,7 @@ const KB=[
 {k:["تواصل","فيسبوك","فيس","رقم","تليفون","موبايل","واتساب","contact","facebook","phone","whatsapp","call"],go:"contact",a:()=>L("تقدر تتابع المدرسة على فيسبوك من قسم تواصل معنا، أو تسيب اقتراحك في نموذج الاقتراحات. رقم التليفون لسه مش مضاف.","You can follow the school on Facebook from the Contact section, or leave a suggestion in the form. The phone number hasn't been added yet.")},
 {k:["انجليزي","english","لغه","language","عربي","ترجمه","translate"],a:()=>L("الموقع بالعربي والإنجليزي. اضغط زرار EN أعلى الصفحة للتبديل.","The site is available in Arabic and English. Use the button at the top of the page to switch.")},
 {k:["ليلي","dark","night","مظلم","theme"],act:()=>setTheme(root.dataset.theme!=="dark",true),a:()=>L("اتبدّل الوضع. تقدر ترجع بزرار القمر/الشمس جنب المساعد.","Theme switched. You can switch back with the moon/sun button next to the assistant.")},
+{k:["تطبيق","تثبيت","ثبت","install","app","شاشه رئيسيه"],a:()=>L("تقدر تثبّت الموقع كتطبيق: من قائمة المتصفح (⋮ أو زر المشاركة) اختار «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».","You can install the site as an app: from the browser menu (⋮ or the share button) choose “Install app” or “Add to Home Screen”.")},
 {k:["شارك","مشاركه","share","رابط الموقع"],act:()=>{const u=location.href.split("?")[0];if(navigator.share)navigator.share({title:document.title,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).catch(()=>{})},a:()=>L("جهّزت لك رابط الموقع للمشاركة.","I've prepared the site link for sharing.")}
 ];
 KB.forEach(e=>e.k=e.k.map(nz));
@@ -531,6 +540,7 @@ async function loadPolls(){try{PL=await getJ("/api/polls");PL.forEach(p=>{rEN(p.
 setInterval(()=>{if(!document.hidden&&PL.length)loadPolls()},20000);
 loadAgenda();loadHonor();loadPolls();
 loadNews();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
 </script>
 </body>
 </html>

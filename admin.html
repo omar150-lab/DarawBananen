@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
 <title>لوحة إدارة موقع المدرسة</title>
+<link rel="manifest" href="/admin.webmanifest"><link rel="icon" type="image/png" href="/icons/admin-icon-192.png"><link rel="apple-touch-icon" href="/icons/admin-apple-touch-icon.png"><meta name="theme-color" content="#0A3D36"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="إدارة دراو">
 <style>
 :root{--bg:#F3F8F6;--card:#fff;--ink:#14302C;--muted:#5C7772;--teal:#0E7C6B;--line:#D5E4E0;--red:#C0392B}
 @media (prefers-color-scheme:dark){:root{--bg:#0D1917;--card:#13272A;--ink:#E4F0ED;--muted:#9FB8B3;--teal:#45D3BA;--line:#244240}}
@@ -15,7 +16,7 @@ input,textarea{font:inherit;width:100%;padding:8px 12px;border:1.5px solid var(-
 small{color:var(--muted)}.msg{color:var(--teal);font-weight:700;min-height:1.6em}.err{color:var(--red)}.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat b{display:block;font-size:30px;color:var(--teal)}
 details{margin-top:10px}summary{cursor:pointer;color:var(--teal)}
 </style></head><body>
-<header><h1>لوحة إدارة موقع المدرسة</h1><span id="role" class="b" hidden></span><button class="g" id="out" hidden>خروج</button></header>
+<header><h1>لوحة إدارة موقع المدرسة</h1><span id="role" class="b" hidden></span><button class="g" id="inst" hidden>📲 ثبّت التطبيق</button><button class="g" id="out" hidden>خروج</button></header>
 <div class="wrap" id="app"></div>
 <script>
 const app=document.getElementById("app"),$=q=>document.querySelector(q);
@@ -69,5 +70,9 @@ function cform(box,res,it){const C=CFG[res],E=it?.en||{};let img=it?.image||"";c
  async function sv(){const rd=(k,t,pre)=>{const v=$("#"+pre+k).value;return t==="opt"?v.split("\n").map(x=>x.trim()).filter(Boolean):k==="active"?+v:v},b={},en={};
   C.f.forEach(([k,l,t])=>{if(t==="img")b[k]=img;else if(!(t==="opt"&&it))b[k]=rd(k,t,"f")});C.en.forEach(([k,l,t])=>en[k]=rd(k,t,"e"));b.en=en;
   try{it?await api("PUT","/api/admin/"+res+"/"+it.id,b):await api("POST","/api/admin/"+res,b);crud(box,res)}catch(x){$("#cm").textContent="تعذّر الحفظ. تأكد من الحقول الأساسية (*)."}}}
+let ip=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;$("#inst").hidden=false});
+$("#inst").onclick=async()=>{if(!ip)return;ip.prompt();await ip.userChoice.catch(()=>{});ip=null;$("#inst").hidden=true};
+addEventListener("appinstalled",()=>{$("#inst").hidden=true});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js").catch(()=>{});
 start();
 </script></body></html>
