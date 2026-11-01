@@ -343,7 +343,7 @@ function count(){if(still)return;const t0=performance.now();(function k(t){const
 
 /* محتوى الموقع: أضف المعلمين والصور هنا */
 /* ضع هنا وسيلة استلام الاقتراحات (واحدة تكفي): رابط Formspree أو رقم واتساب بالصيغة الدولية بدون + أو إيميل */
-const SITE={contact:{endpoint:"",whatsapp:"",email:""},teachers:[],gallery:[{src:"images/gallery-01.webp",caption:"من لحظات المدرسة وأنشطتها"},{src:"images/gallery-02.webp",caption:"داخل الفصل"},{src:"images/gallery-03.webp",caption:"تسليم شهادة في ساحة المدرسة"},{src:"images/gallery-04.webp",caption:"في ساحة المدرسة"},{src:"images/gallery-05.webp",caption:"الطلاب في ساحة المدرسة"},{src:"images/gallery-06.webp",caption:"داخل الفصل"},{src:"images/gallery-07.webp",caption:"داخل الفصل"}]};
+const SITE={contact:{endpoint:"/api/suggest",whatsapp:"",email:""},teachers:[],gallery:[{src:"images/gallery-01.webp",caption:"من لحظات المدرسة وأنشطتها"},{src:"images/gallery-02.webp",caption:"داخل الفصل"},{src:"images/gallery-03.webp",caption:"تسليم شهادة في ساحة المدرسة"},{src:"images/gallery-04.webp",caption:"في ساحة المدرسة"},{src:"images/gallery-05.webp",caption:"الطلاب في ساحة المدرسة"},{src:"images/gallery-06.webp",caption:"داخل الفصل"},{src:"images/gallery-07.webp",caption:"داخل الفصل"}]};
 const mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.textContent=h;return e};
 if(SITE.teachers.length){$("#teachers").hidden=false;$('nav a[href="#teachers"]').hidden=false;SITE.teachers.forEach(t=>{const c=mk("article","card pop"),i=mk("img"),d=mk("div");i.src=t.photo;i.alt=t.name;i.loading="lazy";d.append(mk("small","",t.role||""),mk("h3","",t.name));c.append(i,d);$("#tgrid").append(c)})}
 if(SITE.gallery.length){const g=$(".gal");g.className="gg";g.removeAttribute("role");g.removeAttribute("aria-label");g.innerHTML="";
@@ -352,15 +352,19 @@ if(SITE.gallery.length){const g=$(".gal");g.className="gg";g.removeAttribute("ro
 /* الأخبار: أضف خبر جديد في SITE.news = [{date:"2026-10-31",title:"...",who:"...",text:"...",images:["data:..."],en:{title:"...",who:"...",text:"..."}}]
    وهيظهر تلقائيًا ويترتب من الأحدث للأقدم. الأخبار القديمة تقدر تدّيها تاريخ بإضافة data-date="2026-10-31" على وسم article. */
 const nsec=$("#news .wrap");
-(SITE.news||[]).forEach(n=>{const a=mk("article","news pop"),b=mk("div","nb");a.dataset.date=n.date||"";
+function mkNews(n){const a=mk("article","news pop"),b=mk("div","nb");a.dataset.date=n.date||"";
  b.append(mk("small","","خبر"),mk("h3","",n.title));if(n.who)b.append(mk("b","who",n.who));if(n.text)b.append(mk("p","",n.text));a.append(b);
- if(n.images&&n.images.length){const h=mk("div","hon");n.images.forEach(s=>{const i=mk("img");i.src=s;i.alt=n.title;i.loading="lazy";i.decoding="async";h.append(i)});a.append(h)}
- nsec.append(a)});
+ if(n.images&&n.images.length){const h=mk("div","hon");n.images.forEach(s=>{const i=mk("img");i.src=s;i.alt=n.title;i.loading="lazy";i.decoding="async";h.append(i)});a.append(h)}return a}
 function renderDates(){nsec.querySelectorAll("article.news").forEach(a=>{const s=a.querySelector("small");if(!s)return;let tm=s.querySelector("time");if(!tm){tm=mk("time");s.append(tm)}
  const d=a.dataset.date;if(!d){tm.textContent="";tm.removeAttribute("datetime");return}
  const dt=new Date(d+"T00:00:00");tm.setAttribute("datetime",d);tm.textContent=isNaN(dt)?"":"· "+dt.toLocaleDateString(loc(),{year:"numeric",month:"long",day:"numeric"})})}
-[...nsec.querySelectorAll("article.news")].sort((a,b)=>{const x=a.dataset.date||"",y=b.dataset.date||"";return x===y?0:!x?1:!y?-1:y<x?-1:1}).forEach(a=>nsec.append(a));
-renderDates();
+function sortNews(){[...nsec.querySelectorAll("article.news")].sort((a,b)=>{const x=a.dataset.date||"",y=b.dataset.date||"";return x===y?0:!x?1:!y?-1:y<x?-1:1}).forEach(a=>nsec.append(a))}
+(SITE.news||[]).forEach(n=>nsec.append(mkNews(n)));sortNews();renderDates();
+/* الأخبار تُقرأ من قاعدة البيانات (API). لو تعذّر الاتصال تبقى الأخبار المكتوبة في الصفحة كنسخة احتياطية. */
+async function loadNews(){try{const r=await fetch("/api/news",{headers:{Accept:"application/json"}});if(!r.ok)throw 0;const d=await r.json();if(!Array.isArray(d.news))throw 0;
+ nsec.querySelectorAll("article.news").forEach(a=>a.remove());
+ d.news.forEach(n=>{const e=n.en||{};if(e.title)EN[n.title]=e.title;if(e.who&&n.who)EN[n.who]=e.who;if(e.text&&n.text)EN[n.text]=e.text;nsec.append(mkNews(n))});
+ sortNews();renderDates();nsec.querySelectorAll(".pop").forEach(e=>io.observe(e));if(root.lang==="en")walk(true)}catch(e){}}
 /* ===== الوضع الليلي + مساعد المدرسة + الاقتراحات ===== */
 const L=(a,e)=>root.lang==="en"?e:a;
 const th=mk("button","","🌙");th.id="theme";th.type="button";th.setAttribute("aria-label","تبديل الوضع الليلي");
@@ -493,6 +497,7 @@ function setLang(en){
   document.querySelectorAll("#lang,#lang2").forEach(b=>{b.textContent=en?"عربي":"EN";b.setAttribute("aria-label",en?"التبديل إلى العربية":"Switch to English")})}
 document.querySelectorAll("#lang,#lang2").forEach(b=>b.onclick=()=>setLang(root.lang!=="en"));
 if(new URLSearchParams(location.search).get("lang")==="en")setLang(true);
+loadNews();
 </script>
 </body>
 </html>

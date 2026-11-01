@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>لوحة إدارة موقع المدرسة</title>
+<style>
+:root{--bg:#F3F8F6;--card:#fff;--ink:#14302C;--muted:#5C7772;--teal:#0E7C6B;--line:#D5E4E0;--red:#C0392B}
+@media (prefers-color-scheme:dark){:root{--bg:#0D1917;--card:#13272A;--ink:#E4F0ED;--muted:#9FB8B3;--teal:#45D3BA;--line:#244240}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 Tajawal,Tahoma,sans-serif}
+header{display:flex;gap:10px;align-items:center;padding:12px 18px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0}
+header h1{font-size:19px;margin:0;flex:1}.wrap{max-width:860px;margin:18px auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+button,.b{font:inherit;border:0;border-radius:10px;padding:6px 14px;background:var(--teal);color:#fff;cursor:pointer}button.g{background:none;color:var(--teal);border:1.5px solid var(--teal)}button.r{background:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
+input,textarea{font:inherit;width:100%;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}label{display:block;margin:8px 0 2px;color:var(--muted);font-size:15px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}.tabs button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .sp{flex:1}.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.thumbs div{position:relative}.thumbs img{width:84px;height:84px;object-fit:cover;border-radius:10px}.thumbs button{position:absolute;top:2px;inset-inline-start:2px;padding:0 7px;background:var(--red)}
+small{color:var(--muted)}.msg{color:var(--teal);font-weight:700;min-height:1.6em}.err{color:var(--red)}.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat b{display:block;font-size:30px;color:var(--teal)}
+details{margin-top:10px}summary{cursor:pointer;color:var(--teal)}
+</style></head><body>
+<header><h1>لوحة إدارة موقع المدرسة</h1><span id="role" class="b" hidden></span><button class="g" id="out" hidden>خروج</button></header>
+<div class="wrap" id="app"></div>
+<script>
+const app=document.getElementById("app"),$=q=>document.querySelector(q);
+const h=(t,p={},...k)=>{const e=document.createElement(t);for(const[a,v]of Object.entries(p)){if(a==="class")e.className=v;else if(a.startsWith("on"))e.addEventListener(a.slice(2),v);else if(v!==false&&v!==undefined)e.setAttribute(a,v===true?"":v)}k.flat().forEach(c=>e.append(c instanceof Node?c:document.createTextNode(c)));return e};
+const api=async(m,p,b)=>{const r=await fetch(p,{method:m,headers:{"content-type":"application/json"},body:b?JSON.stringify(b):undefined,credentials:"same-origin",cache:"no-store"});const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||r.status),{status:r.status,code:j.error});return j};
+let role="",tab="news",edit=null,imgs=[];
+const ro=()=>role!=="admin";
+function login(msg){app.replaceChildren(h("div",{class:"card"},h("h2",{},"تسجيل الدخول"),h("label",{for:"pw"},"كلمة المرور"),h("input",{id:"pw",type:"password",autocomplete:"current-password",onkeydown:e=>e.key==="Enter"&&go()}),h("p",{class:"msg err",id:"lm"},msg||""),h("button",{onclick:go},"دخول")));
+ async function go(){try{const r=await api("POST","/api/login",{password:$("#pw").value});role=r.role;start()}catch(e){$("#lm").textContent=e.code==="rate"?"محاولات كتير. جرّب بعد ربع ساعة.":e.code==="not-configured"?"لم يتم ضبط كلمة المرور على السيرفر بعد.":"كلمة المرور غير صحيحة."}}}
+async function start(){try{role=(await api("GET","/api/admin/me")).role}catch(e){return login()}
+ $("#role").hidden=false;$("#role").textContent=role==="admin"?"مسؤول":"عرض فقط";$("#out").hidden=false;shell()}
+$("#out").onclick=async()=>{await api("POST","/api/logout").catch(()=>{});location.reload()};
+function shell(){const t=(k,l)=>h("button",{class:tab===k?"on":"",onclick:()=>{tab=k;edit=null;shell()}},l);
+ const box=h("div",{});app.replaceChildren(...(ro()?[h("p",{class:"card"},"وضع العرض فقط: تقدر تتصفح اللوحة لكن التعديل متاح للمسؤول بس.")]:[]),h("div",{class:"tabs"},t("news","الأخبار"),t("sug","الاقتراحات"),t("stats","إحصائيات")),box);
+ ({news:news,sug:sugs,stats:stats})[tab](box)}
+async function news(box){const{news:list}=await fetch("/api/news",{cache:"no-store"}).then(r=>r.json());
+ box.replaceChildren(h("div",{class:"row"},h("h2",{class:"sp"},"الأخبار ("+list.length+")"),h("button",{disabled:ro(),onclick:()=>form(box,null)},"+ خبر جديد")),...list.map(n=>h("div",{class:"card"},h("b",{},n.title),h("div",{},h("small",{},(n.date||"بدون تاريخ")+" · "+n.images.length+" صور")),h("div",{class:"row",style:"margin-top:8px"},h("button",{class:"g",disabled:ro(),onclick:()=>form(box,n)},"تعديل"),h("button",{class:"r",disabled:ro(),onclick:async()=>{if(confirm("حذف الخبر نهائيًا؟")){await api("DELETE","/api/admin/news/"+n.id);news(box)}}},"حذف")))))}
+function form(box,n){edit=n;imgs=n?[...n.images]:[];const e=n?.en||{};
+ const f=(id,l,v,ta)=>[h("label",{for:id},l),h(ta?"textarea":"input",{id,rows:ta?5:undefined,value:ta?undefined:v||"",maxlength:ta?3000:150},ta?v||"":[])];
+ const th=h("div",{class:"thumbs"});const draw=()=>th.replaceChildren(...imgs.map((u,i)=>h("div",{},h("img",{src:u,alt:""}),h("button",{type:"button",onclick:()=>{imgs.splice(i,1);draw()}},"×"))));draw();
+ box.replaceChildren(h("div",{class:"card"},h("h2",{},n?"تعديل خبر":"خبر جديد"),...f("t","العنوان *",n?.title),...f("w","الاسم أو الجهة (اختياري)",n?.who),h("label",{for:"d"},"التاريخ"),h("input",{id:"d",type:"date",value:n?.date||""}),...f("x","نص الخبر",n?.text,1),
+  h("label",{for:"f"},"الصور (بتتصغّر تلقائيًا قبل الرفع، وخد موافقة أصحاب الصور)"),h("input",{id:"f",type:"file",accept:"image/*",multiple:true,onchange:up}),th,
+  h("details",{},h("summary",{},"الترجمة الإنجليزية (اختياري)"),...f("te","Title",e.title),...f("we","Name / source",e.who),...f("xe","Text",e.text,1)),
+  h("p",{class:"msg",id:"fm"}),h("div",{class:"row"},h("button",{onclick:save},"حفظ ونشر"),h("button",{class:"g",onclick:()=>news(box)},"إلغاء"))));
+ async function up(ev){const m=$("#fm");for(const file of ev.target.files){try{m.textContent="جاري رفع الصورة…";const bm=await createImageBitmap(file),k=Math.min(1,1100/Math.max(bm.width,bm.height)),c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
+   let d=c.toDataURL("image/webp",.8);if(!d.startsWith("data:image/webp"))d=c.toDataURL("image/jpeg",.82);imgs.push((await api("POST","/api/admin/image",{data:d})).url);draw();m.textContent=""}catch(x){m.textContent="تعذّر رفع صورة.";m.className="msg err"}}ev.target.value=""}
+ async function save(){const m=$("#fm");const b={title:$("#t").value,who:$("#w").value,date:$("#d").value,text:$("#x").value,images:imgs,en:{title:$("#te").value,who:$("#we").value,text:$("#xe").value}};
+  if(!b.title.trim()){m.textContent="اكتب العنوان.";m.className="msg err";return}
+  try{n?await api("PUT","/api/admin/news/"+n.id,b):await api("POST","/api/admin/news",b);news(box)}catch(x){m.textContent="تعذّر الحفظ.";m.className="msg err"}}}
+async function sugs(box){const{items}=await api("GET","/api/admin/suggestions");
+ box.replaceChildren(h("h2",{},"الاقتراحات ("+items.length+")"),...(items.length?items.map(s=>h("div",{class:"card"},h("p",{style:"margin:0 0 6px;white-space:pre-line"},s.message),h("small",{},(s.name||"بدون اسم")+" · "+new Date(s.created_at).toLocaleString("ar-EG")),h("div",{class:"row",style:"margin-top:8px"},h("span",{class:"b",style:s.status==="done"?"background:#6b8e86":""},s.status==="done"?"تمت المراجعة":"جديد"),h("button",{class:"g",disabled:ro(),onclick:async()=>{await api("PATCH","/api/admin/suggestions/"+s.id,{status:s.status==="done"?"new":"done"});sugs(box)}},s.status==="done"?"إرجاع لجديد":"تمت المراجعة"),h("button",{class:"r",disabled:ro(),onclick:async()=>{if(confirm("حذف الاقتراح؟")){await api("DELETE","/api/admin/suggestions/"+s.id);sugs(box)}}},"حذف")))):[h("p",{},"لا توجد اقتراحات بعد.")]))}
+async function stats(box){const s=await api("GET","/api/admin/stats"),c=(n,l)=>h("div",{class:"card"},h("b",{},String(n)),l);
+ box.replaceChildren(h("h2",{},"إحصائيات"),h("div",{class:"stat"},c(s.news,"خبر منشور"),c(s.suggestions,"اقتراح مستلم"),c(s.newSuggestions,"اقتراح جديد"),c(s.images,"صورة مرفوعة")))}
+start();
+</script></body></html>
