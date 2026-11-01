@@ -133,6 +133,10 @@ header.force{transform:none}
 .hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}.hc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}.hc img,.hi{width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 auto 8px;display:block}.hi{display:grid;place-items:center;background:linear-gradient(135deg,#0E7C6B,#7B5CD6);color:#fff;font-size:38px}.hc p{margin:4px 0 0;color:var(--muted)}
 .pc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;max-width:640px;margin:0 auto 14px}.pc h3{margin:0 0 10px}.po{display:block;width:100%;text-align:start;margin-bottom:8px;padding:10px 14px;border:1.5px solid var(--teal);border-radius:12px;background:none;color:var(--ink);font:inherit;cursor:pointer}.po:hover{background:var(--bg)}
 .pr{position:relative;display:flex;justify-content:space-between;gap:10px;padding:9px 14px;margin-bottom:8px;border-radius:12px;background:var(--bg);overflow:hidden}.pr i{position:absolute;inset-block:0;inset-inline-start:0;background:rgba(14,124,107,.28);transition:width .6s}.pr span,.pr b{position:relative}
+.fl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.fl button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 16px;font:600 15px "Tajawal",sans-serif;cursor:pointer}.fl button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.ml{display:inline-block;margin-top:6px;color:var(--teal);font-weight:700}.qg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}.qg .pc{margin:0;max-width:none}.qg small{color:var(--muted);display:block;margin-bottom:8px}
+.bt{border:0;border-radius:999px;padding:7px 20px;background:var(--teal);color:#fff;font:700 16px "Tajawal",sans-serif;cursor:pointer}
+#qd{width:min(640px,94vw);border:0;border-radius:18px;padding:18px;background:var(--card);color:var(--ink);max-height:90vh;overflow:auto}#qd::backdrop{background:rgba(0,0,0,.55)}#qd fieldset{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;padding:10px 14px}#qd legend{font-weight:700;padding:0 6px}#qd label{display:block;padding:6px 8px;border-radius:8px;cursor:pointer}#qd label.ok{background:rgba(14,124,107,.28)}#qd label.bad{background:rgba(192,57,43,.28)}
 html[data-theme=dark]{--bg:#0D1917;--ink:#E4F0ED;--muted:#9FB8B3;--teal:#45D3BA;--deep:#06231F;--card:#13272A;--line:#244240;color-scheme:dark}
 html[data-theme=dark] header{background:rgba(13,25,23,.96)}
 #theme,#bot{position:fixed;border:0;border-radius:50%;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:16}
@@ -332,6 +336,9 @@ html[dir=rtl] .bi button{transform:scaleX(-1)}
 <section id="honor" hidden><div class="wrap"><div class="t"><h2>لوحة الشرف</h2><p>نفخر بطلابنا المتميزين.</p></div><div class="hg" id="hgrid"></div></div></section>
 <section id="polls" hidden><div class="wrap"><div class="t"><h2>رأيك يهمنا</h2><p>شارك برأيك في استطلاعات المدرسة.</p></div><div id="pgrid"></div></div></section>
 
+<section id="learn" hidden><div class="wrap"><div class="t"><h2>المواد التعليمية والاختبارات</h2><p>ملخصات وروابط مراجعة واختبارات قصيرة من معلمي المدرسة.</p></div><div class="fl" id="lf"></div><div id="lm"></div><h3 id="lqh" hidden>اختبارات قصيرة</h3><div class="qg" id="lq"></div></div></section>
+<dialog id="qd" aria-label="اختبار"></dialog>
+
 <section id="suggest"><div class="wrap">
   <div class="t"><h2>اقتراحاتك تهمنا</h2><p>اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.</p></div>
   <div class="sg"><input id="sgn" aria-label="اسمك (اختياري)" placeholder="اسمك (اختياري)" maxlength="60" autocomplete="name"><textarea id="sgm" rows="4" aria-label="اقتراحك" placeholder="اكتب اقتراحك هنا" maxlength="600"></textarea><button class="btn" id="sgb" type="button">إرسال الاقتراح</button><p id="sgs" role="status"></p></div>
@@ -419,6 +426,7 @@ const KB=[
 {k:["تواصل","فيسبوك","فيس","رقم","تليفون","موبايل","واتساب","contact","facebook","phone","whatsapp","call"],go:"contact",a:()=>L("تقدر تتابع المدرسة على فيسبوك من قسم تواصل معنا، أو تسيب اقتراحك في نموذج الاقتراحات. رقم التليفون لسه مش مضاف.","You can follow the school on Facebook from the Contact section, or leave a suggestion in the form. The phone number hasn't been added yet.")},
 {k:["انجليزي","english","لغه","language","عربي","ترجمه","translate"],a:()=>L("الموقع بالعربي والإنجليزي. اضغط زرار EN أعلى الصفحة للتبديل.","The site is available in Arabic and English. Use the button at the top of the page to switch.")},
 {k:["ليلي","dark","night","مظلم","theme"],act:()=>setTheme(root.dataset.theme!=="dark",true),a:()=>L("اتبدّل الوضع. تقدر ترجع بزرار القمر/الشمس جنب المساعد.","Theme switched. You can switch back with the moon/sun button next to the assistant.")},
+{k:["اختبار","اختبارات","مواد","ملخص","مذاكره","مراجعه","quiz","quizzes","materials","study"],go:"learn",a:()=>L("في قسم «المواد التعليمية والاختبارات» هتلاقي ملخصات وروابط مراجعة من المعلمين، واختبارات قصيرة تحلها وتعرف نتيجتك فورًا.","In the “Study materials & quizzes” section you’ll find summaries and revision links from teachers, plus short quizzes with instant results.")},
 {k:["تطبيق","تثبيت","ثبت","install","app","شاشه رئيسيه"],a:()=>L("تقدر تثبّت الموقع كتطبيق: من قائمة المتصفح (⋮ أو زر المشاركة) اختار «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».","You can install the site as an app: from the browser menu (⋮ or the share button) choose “Install app” or “Add to Home Screen”.")},
 {k:["شارك","مشاركه","share","رابط الموقع"],act:()=>{const u=location.href.split("?")[0];if(navigator.share)navigator.share({title:document.title,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).catch(()=>{})},a:()=>L("جهّزت لك رابط الموقع للمشاركة.","I've prepared the site link for sharing.")}
 ];
@@ -496,7 +504,7 @@ const EN={"عرض الصورة":"Image viewer","إغلاق":"Close","الساب�
 "معرض المدرسة":"School Gallery","المزيد من الصور والفعاليات على صفحة المدرسة في فيسبوك.":"More photos and events on the school's Facebook page.","لقطة جماعية من داخل المدرسة":"Group photo inside the school",
 "دراو، أسوان.":"Daraw, Aswan.","صفحة المدرسة على فيسبوك":"School Facebook page","افتح الموقع على الخريطة":"Open on map","دراو، أسوان · ©":"Daraw, Aswan · ©","تصميم وتطوير: عمر الحسين صلاح الدين دياب":"Designed & developed by Omar Al-Hussein Salah El-Din Diab","أقسام الموقع":"Site sections"};
 (SITE.news||[]).forEach(n=>{if(!n.en)return;[["title"],["who"],["text"]].forEach(([k])=>{if(n[k]&&n.en[k])EN[n[k]]=n.en[k]})});
-Object.assign(EN,{"التقويم والإعلانات":"Calendar & announcements","أحداث وإعلانات المدرسة القادمة.":"Upcoming school events and announcements.","لوحة الشرف":"Honor board","نفخر بطلابنا المتميزين.":"We are proud of our outstanding students.","رأيك يهمنا":"Your opinion matters","شارك برأيك في استطلاعات المدرسة.":"Share your opinion in school polls.","اقتراحاتك تهمنا":"Your suggestions matter","اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.":"Write your suggestion or feedback about the school or the site.","اسمك (اختياري)":"Your name (optional)","اكتب اقتراحك هنا":"Write your suggestion here","اقتراحك":"Your suggestion","إرسال الاقتراح":"Send suggestion","مساعد دراو":"Daraw Assistant","ردود جاهزة عن المدرسة والموقع":"Ready answers about the school and the site","اكتب سؤالك هنا":"Type your question here","اكتب سؤالك":"Your question","إرسال":"Send","اسأل مساعد المدرسة":"Ask the school assistant","مساعد المدرسة":"School assistant","تبديل الوضع الليلي":"Toggle dark mode"});
+Object.assign(EN,{"المواد التعليمية والاختبارات":"Study materials & quizzes","ملخصات وروابط مراجعة واختبارات قصيرة من معلمي المدرسة.":"Summaries, revision links and short quizzes from our teachers.","اختبارات قصيرة":"Short quizzes","التقويم والإعلانات":"Calendar & announcements","أحداث وإعلانات المدرسة القادمة.":"Upcoming school events and announcements.","لوحة الشرف":"Honor board","نفخر بطلابنا المتميزين.":"We are proud of our outstanding students.","رأيك يهمنا":"Your opinion matters","شارك برأيك في استطلاعات المدرسة.":"Share your opinion in school polls.","اقتراحاتك تهمنا":"Your suggestions matter","اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.":"Write your suggestion or feedback about the school or the site.","اسمك (اختياري)":"Your name (optional)","اكتب اقتراحك هنا":"Write your suggestion here","اقتراحك":"Your suggestion","إرسال الاقتراح":"Send suggestion","مساعد دراو":"Daraw Assistant","ردود جاهزة عن المدرسة والموقع":"Ready answers about the school and the site","اكتب سؤالك هنا":"Type your question here","اكتب سؤالك":"Your question","إرسال":"Send","اسأل مساعد المدرسة":"Ask the school assistant","مساعد المدرسة":"School assistant","تبديل الوضع الليلي":"Toggle dark mode"});
 const orig=new WeakMap(),AT=["alt","aria-label","placeholder"];
 function walk(en){
   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
@@ -531,14 +539,35 @@ const voted=id=>{try{return localStorage.getItem("v"+id)==="1"}catch(e){return!!
 function drawPolls(){const g=$("#pgrid");if(!g)return;g.replaceChildren();$("#polls").hidden=!PL.length;PL.forEach(p=>{const c=mk("div","pc"),done=voted(p.id),tot=p.counts.reduce((a,b)=>a+b,0);c.append(mk("h3","",p.question));
  p.options.forEach((o,i)=>{if(done){const r=mk("div","pr"),pc=tot?Math.round(p.counts[i]*100/tot):0,bar=mk("i");bar.style.width=pc+"%";r.append(bar,mk("span","",o),mk("b","",fmt(pc)+"%"));c.append(r)}else{const b=mk("button","po",o);b.type="button";b.onclick=()=>vote(p.id,i);c.append(b)}});
  c.append(mk("small","",done?L("إجمالي الأصوات: ","Total votes: ")+fmt(tot):L("اختر إجابة واحدة","Choose one answer")));g.append(c)})}
-function drawAll(){try{drawAgenda();drawHonor();drawPolls()}catch(e){}}
+function drawAll(){try{drawAgenda();drawHonor();drawPolls();drawLearn()}catch(e){}}
 async function vote(id,i){try{const r=await fetch("/api/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({poll:id,opt:i,token:tok()})});if(r.ok){try{localStorage.setItem("v"+id,"1")}catch(e){VM[id]=1}}await loadPolls()}catch(e){}}
 const gl=()=>{if(root.lang==="en")walk(true)};
 async function loadAgenda(){try{AG=await getJ("/api/agenda");AG.forEach(x=>rEN(x.en,x,["title","body"]));drawAgenda();gl()}catch(e){}}
 async function loadHonor(){try{HN=await getJ("/api/honor");HN.forEach(x=>rEN(x.en,x,["name","achievement"]));drawHonor();gl()}catch(e){}}
 async function loadPolls(){try{PL=await getJ("/api/polls");PL.forEach(p=>{rEN(p.en,p,["question"]);((p.en||{}).options||[]).forEach((e,i)=>{if(e&&p.options[i])EN[p.options[i]]=e})});drawPolls();gl()}catch(e){}}
 setInterval(()=>{if(!document.hidden&&PL.length)loadPolls()},20000);
-loadAgenda();loadHonor();loadPolls();
+/* ===== المواد التعليمية والاختبارات ===== */
+var LM=[],LQ=[],LG="all",LS="";
+const GRN={"0":"كل الصفوف","1":"الصف الأول","2":"الصف الثاني","3":"الصف الثالث"},KIC={video:"🎥",pdf:"📄",link:"🔗"};
+function drawLearn(){const f=$("#lf");if(!f)return;$("#learn").hidden=!(LM.length||LQ.length);f.replaceChildren();
+ const chip=(l,on,fn)=>{const b=mk("button",on?"on":"",l);b.type="button";b.onclick=fn;f.append(b)};
+ [["all",L("كل الصفوف","All grades")],["1",L("الصف الأول","Grade 1")],["2",L("الصف الثاني","Grade 2")],["3",L("الصف الثالث","Grade 3")]].forEach(([v,l])=>chip(l,LG===v,()=>{LG=v;drawLearn()}));
+ const subs=[...new Set([...LM,...LQ].map(x=>x.subject).filter(Boolean))];if(subs.length){chip(L("كل المواد","All subjects"),!LS,()=>{LS="";drawLearn()});subs.forEach(s=>chip(s,LS===s,()=>{LS=s;drawLearn()}))}
+ const ok=x=>(LG==="all"||x.grade==="0"||x.grade===LG)&&(!LS||x.subject===LS),m=$("#lm"),q=$("#lq");m.replaceChildren();q.replaceChildren();
+ LM.filter(ok).forEach(x=>{const r=mk("div","ai"),i=mk("div","ad",KIC[x.kind]||"🔗"),d=mk("div");d.append(mk("b","",x.title));d.append(mk("p","",[x.subject,GRN[x.grade],x.teacher_name].filter(Boolean).join(" · ")));if(x.note)d.append(mk("p","",x.note));
+  const a=mk("a","ml",L("افتح","Open"));a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";d.append(a);r.append(i,d);m.append(r)});
+ const qs=LQ.filter(ok);$("#lqh").hidden=!qs.length;
+ qs.forEach(x=>{const c=mk("div","pc");c.append(mk("h3","",x.title),mk("small","",[x.subject,GRN[x.grade],fmt(x.count)+" "+L("أسئلة","questions")].filter(Boolean).join(" · ")));const b=mk("button","bt",L("ابدأ الاختبار","Start quiz"));b.type="button";b.onclick=()=>openQuiz(x.id);c.append(b);q.append(c)})}
+async function openQuiz(id){try{const d=$("#qd"),z=await (await fetch("/api/quizzes/"+id)).json();d.replaceChildren(mk("h3","",z.title));
+ const f=mk("form");z.questions.forEach((q,i)=>{const s=mk("fieldset"),g=mk("legend","",fmt(i+1)+". "+q.q);s.append(g);q.options.forEach((o,k)=>{const l=mk("label"),r=mk("input");r.type="radio";r.name="q"+i;r.value=k;l.append(r,document.createTextNode(" "+o));s.append(l)});f.append(s)});
+ const out=mk("p","",""),go=mk("button","bt",L("إرسال الإجابات","Submit answers")),cl=mk("button","bt",L("إغلاق","Close"));go.type="submit";cl.type="button";cl.style.background="var(--muted)";cl.onclick=()=>d.close();
+ f.onsubmit=async e=>{e.preventDefault();const a=z.questions.map((q,i)=>{const c=f.querySelector('input[name="q'+i+'"]:checked');return c?+c.value:-1});
+  try{const r=await (await fetch("/api/quizzes/"+id+"/submit",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({answers:a})})).json();if(r.score==null)throw 0;
+   out.textContent=L("نتيجتك: ","Your score: ")+fmt(r.score)+L(" من "," of ")+fmt(r.total)+" ("+fmt(Math.round(r.score*100/r.total))+"%)";out.style.fontWeight="700";go.hidden=true;
+   f.querySelectorAll("fieldset").forEach((s,i)=>{s.querySelectorAll("label").forEach((l,k)=>{l.classList.remove("ok","bad");if(k===r.results[i].correct)l.classList.add("ok");else if(k===r.results[i].chosen)l.classList.add("bad")});s.querySelectorAll("input").forEach(x=>x.disabled=true)})}catch(x){out.textContent=L("تعذّر إرسال الإجابات، حاول تاني.","Could not submit, please try again.")}};
+ f.append(out,go);d.append(f,cl);d.showModal()}catch(e){}}
+async function loadLearn(){try{LM=await getJ("/api/materials");LQ=await getJ("/api/quizzes");drawLearn()}catch(e){}}
+loadAgenda();loadHonor();loadPolls();loadLearn();
 loadNews();
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
 </script>
