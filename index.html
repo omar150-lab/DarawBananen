@@ -119,6 +119,12 @@ header.force{transform:none}
 .lb #lbx{top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:14px}
 .lb #lbL{left:12px;top:50%;margin-top:-23px}.lb #lbR{right:12px;top:50%;margin-top:-23px}
 .news+.news{margin-top:22px}
+.cd{background:linear-gradient(135deg,#0E7C6B,#7B5CD6);color:#fff;border-radius:18px;padding:18px 22px;display:grid;gap:2px;margin-bottom:16px}.cd b{font:700 24px "Reem Kufi",sans-serif}.cd span{font-size:22px;font-weight:700}.cd small{opacity:.9}
+.ai{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}.ai p{margin:2px 0 0;color:var(--muted)}.ai.nt{border-inline-start:5px solid #F2A33A}
+.ad{flex:none;min-width:64px;text-align:center;background:var(--bg);border-radius:10px;padding:6px 8px;font-weight:700;color:var(--teal)}
+.hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}.hc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}.hc img,.hi{width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 auto 8px;display:block}.hi{display:grid;place-items:center;background:linear-gradient(135deg,#0E7C6B,#7B5CD6);color:#fff;font-size:38px}.hc p{margin:4px 0 0;color:var(--muted)}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;max-width:640px;margin:0 auto 14px}.pc h3{margin:0 0 10px}.po{display:block;width:100%;text-align:start;margin-bottom:8px;padding:10px 14px;border:1.5px solid var(--teal);border-radius:12px;background:none;color:var(--ink);font:inherit;cursor:pointer}.po:hover{background:var(--bg)}
+.pr{position:relative;display:flex;justify-content:space-between;gap:10px;padding:9px 14px;margin-bottom:8px;border-radius:12px;background:var(--bg);overflow:hidden}.pr i{position:absolute;inset-block:0;inset-inline-start:0;background:rgba(14,124,107,.28);transition:width .6s}.pr span,.pr b{position:relative}
 html[data-theme=dark]{--bg:#0D1917;--ink:#E4F0ED;--muted:#9FB8B3;--teal:#45D3BA;--deep:#06231F;--card:#13272A;--line:#244240;color-scheme:dark}
 html[data-theme=dark] header{background:rgba(13,25,23,.96)}
 #theme,#bot{position:fixed;border:0;border-radius:50%;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:16}
@@ -314,6 +320,10 @@ html[dir=rtl] .bi button{transform:scaleX(-1)}
   <div class="gal pop" role="img" aria-label="لقطة جماعية من داخل المدرسة"></div>
 </div></section>
 
+<section id="agenda" hidden><div class="wrap"><div class="t"><h2>التقويم والإعلانات</h2><p>أحداث وإعلانات المدرسة القادمة.</p></div><div id="agc"></div></div></section>
+<section id="honor" hidden><div class="wrap"><div class="t"><h2>لوحة الشرف</h2><p>نفخر بطلابنا المتميزين.</p></div><div class="hg" id="hgrid"></div></div></section>
+<section id="polls" hidden><div class="wrap"><div class="t"><h2>رأيك يهمنا</h2><p>شارك برأيك في استطلاعات المدرسة.</p></div><div id="pgrid"></div></div></section>
+
 <section id="suggest"><div class="wrap">
   <div class="t"><h2>اقتراحاتك تهمنا</h2><p>اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.</p></div>
   <div class="sg"><input id="sgn" aria-label="اسمك (اختياري)" placeholder="اسمك (اختياري)" maxlength="60" autocomplete="name"><textarea id="sgm" rows="4" aria-label="اقتراحك" placeholder="اكتب اقتراحك هنا" maxlength="600"></textarea><button class="btn" id="sgb" type="button">إرسال الاقتراح</button><p id="sgs" role="status"></p></div>
@@ -477,7 +487,7 @@ const EN={"عرض الصورة":"Image viewer","إغلاق":"Close","الساب�
 "معرض المدرسة":"School Gallery","المزيد من الصور والفعاليات على صفحة المدرسة في فيسبوك.":"More photos and events on the school's Facebook page.","لقطة جماعية من داخل المدرسة":"Group photo inside the school",
 "دراو، أسوان.":"Daraw, Aswan.","صفحة المدرسة على فيسبوك":"School Facebook page","افتح الموقع على الخريطة":"Open on map","دراو، أسوان · ©":"Daraw, Aswan · ©","تصميم وتطوير: عمر الحسين صلاح الدين دياب":"Designed & developed by Omar Al-Hussein Salah El-Din Diab","أقسام الموقع":"Site sections"};
 (SITE.news||[]).forEach(n=>{if(!n.en)return;[["title"],["who"],["text"]].forEach(([k])=>{if(n[k]&&n.en[k])EN[n[k]]=n.en[k]})});
-Object.assign(EN,{"اقتراحاتك تهمنا":"Your suggestions matter","اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.":"Write your suggestion or feedback about the school or the site.","اسمك (اختياري)":"Your name (optional)","اكتب اقتراحك هنا":"Write your suggestion here","اقتراحك":"Your suggestion","إرسال الاقتراح":"Send suggestion","مساعد دراو":"Daraw Assistant","ردود جاهزة عن المدرسة والموقع":"Ready answers about the school and the site","اكتب سؤالك هنا":"Type your question here","اكتب سؤالك":"Your question","إرسال":"Send","اسأل مساعد المدرسة":"Ask the school assistant","مساعد المدرسة":"School assistant","تبديل الوضع الليلي":"Toggle dark mode"});
+Object.assign(EN,{"التقويم والإعلانات":"Calendar & announcements","أحداث وإعلانات المدرسة القادمة.":"Upcoming school events and announcements.","لوحة الشرف":"Honor board","نفخر بطلابنا المتميزين.":"We are proud of our outstanding students.","رأيك يهمنا":"Your opinion matters","شارك برأيك في استطلاعات المدرسة.":"Share your opinion in school polls.","اقتراحاتك تهمنا":"Your suggestions matter","اكتب اقتراحك أو ملاحظتك عن المدرسة أو الموقع.":"Write your suggestion or feedback about the school or the site.","اسمك (اختياري)":"Your name (optional)","اكتب اقتراحك هنا":"Write your suggestion here","اقتراحك":"Your suggestion","إرسال الاقتراح":"Send suggestion","مساعد دراو":"Daraw Assistant","ردود جاهزة عن المدرسة والموقع":"Ready answers about the school and the site","اكتب سؤالك هنا":"Type your question here","اكتب سؤالك":"Your question","إرسال":"Send","اسأل مساعد المدرسة":"Ask the school assistant","مساعد المدرسة":"School assistant","تبديل الوضع الليلي":"Toggle dark mode"});
 const orig=new WeakMap(),AT=["alt","aria-label","placeholder"];
 function walk(en){
   const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
@@ -492,11 +502,34 @@ const dig=s=>root.lang==="en"?s.replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".ind
 function setLang(en){
   root.lang=en?"en":"ar";root.dir=en?"ltr":"rtl";
   document.title=en?"Daraw Boys' Secondary School":"دراو بنين الثانوية";
-  walk(en);renderDates();yrs.textContent=fmt(age);$("#yr").textContent=" "+fmt(y);setW();
+  drawAll();walk(en);renderDates();yrs.textContent=fmt(age);$("#yr").textContent=" "+fmt(y);setW();
   rows.querySelectorAll(".s,.x").forEach(i=>i.value=dig(i.value));calc();
   document.querySelectorAll("#lang,#lang2").forEach(b=>{b.textContent=en?"عربي":"EN";b.setAttribute("aria-label",en?"التبديل إلى العربية":"Switch to English")})}
 document.querySelectorAll("#lang,#lang2").forEach(b=>b.onclick=()=>setLang(root.lang!=="en"));
 if(new URLSearchParams(location.search).get("lang")==="en")setLang(true);
+/* ===== التقويم + لوحة الشرف + الاستطلاعات (من قاعدة البيانات) ===== */
+var AG=[],HN=[],PL=[],MT="",VM={};
+const dayN=d=>Math.round((new Date(d+"T00:00:00")-new Date(new Date().toDateString()))/864e5);
+const rEN=(e,o,ks)=>{if(e)ks.forEach(k=>{if(o[k]&&e[k])EN[o[k]]=e[k]})};
+async function getJ(u){const r=await fetch(u,{headers:{Accept:"application/json"}});if(!r.ok)throw 0;return (await r.json()).items}
+function drawAgenda(){const box=$("#agc");if(!box)return;box.replaceChildren();const ev=AG.filter(x=>x.kind==="event"&&dayN(x.date)>=0),no=AG.filter(x=>x.kind==="notice");$("#agenda").hidden=!(ev.length||no.length);
+ if(ev.length){const n=dayN(ev[0].date),c=mk("div","cd");c.append(mk("small","",L("أقرب حدث","Next event")),mk("b","",ev[0].title),mk("span","",n===0?L("النهارده","Today"):n===1?L("بكرة","Tomorrow"):L("بعد "+fmt(n)+" يوم","In "+n+" days")));box.append(c)}
+ const row=(x,nt)=>{const r=mk("div","ai"+(nt?" nt":"")),d=mk("time","ad"),t=mk("div");d.textContent=nt?"📢":new Date(x.date+"T00:00:00").toLocaleDateString(loc(),{day:"numeric",month:"short"});t.append(mk("b","",x.title));if(x.body)t.append(mk("p","",x.body));r.append(d,t);box.append(r)};
+ ev.forEach(x=>row(x,0));no.forEach(x=>row(x,1))}
+function drawHonor(){const g=$("#hgrid");if(!g)return;g.replaceChildren();$("#honor").hidden=!HN.length;HN.forEach(x=>{const c=mk("div","hc");if(x.image){const i=mk("img");i.src=x.image;i.alt=x.name;i.loading="lazy";c.append(i)}else c.append(mk("div","hi",[...x.name][0]||"★"));c.append(mk("b","",x.name));if(x.achievement)c.append(mk("p","",x.achievement));g.append(c)})}
+const tok=()=>{try{let t=localStorage.getItem("vt");if(!t){t=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(36).padStart(2,"0")).join("").slice(0,24).padEnd(16,"a");localStorage.setItem("vt",t)}return t}catch(e){return MT||(MT=Math.random().toString(36).slice(2).padEnd(16,"x"))}};
+const voted=id=>{try{return localStorage.getItem("v"+id)==="1"}catch(e){return!!VM[id]}};
+function drawPolls(){const g=$("#pgrid");if(!g)return;g.replaceChildren();$("#polls").hidden=!PL.length;PL.forEach(p=>{const c=mk("div","pc"),done=voted(p.id),tot=p.counts.reduce((a,b)=>a+b,0);c.append(mk("h3","",p.question));
+ p.options.forEach((o,i)=>{if(done){const r=mk("div","pr"),pc=tot?Math.round(p.counts[i]*100/tot):0,bar=mk("i");bar.style.width=pc+"%";r.append(bar,mk("span","",o),mk("b","",fmt(pc)+"%"));c.append(r)}else{const b=mk("button","po",o);b.type="button";b.onclick=()=>vote(p.id,i);c.append(b)}});
+ c.append(mk("small","",done?L("إجمالي الأصوات: ","Total votes: ")+fmt(tot):L("اختر إجابة واحدة","Choose one answer")));g.append(c)})}
+function drawAll(){try{drawAgenda();drawHonor();drawPolls()}catch(e){}}
+async function vote(id,i){try{const r=await fetch("/api/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({poll:id,opt:i,token:tok()})});if(r.ok){try{localStorage.setItem("v"+id,"1")}catch(e){VM[id]=1}}await loadPolls()}catch(e){}}
+const gl=()=>{if(root.lang==="en")walk(true)};
+async function loadAgenda(){try{AG=await getJ("/api/agenda");AG.forEach(x=>rEN(x.en,x,["title","body"]));drawAgenda();gl()}catch(e){}}
+async function loadHonor(){try{HN=await getJ("/api/honor");HN.forEach(x=>rEN(x.en,x,["name","achievement"]));drawHonor();gl()}catch(e){}}
+async function loadPolls(){try{PL=await getJ("/api/polls");PL.forEach(p=>{rEN(p.en,p,["question"]);((p.en||{}).options||[]).forEach((e,i)=>{if(e&&p.options[i])EN[p.options[i]]=e})});drawPolls();gl()}catch(e){}}
+setInterval(()=>{if(!document.hidden&&PL.length)loadPolls()},20000);
+loadAgenda();loadHonor();loadPolls();
 loadNews();
 </script>
 </body>

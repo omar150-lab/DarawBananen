@@ -10,7 +10,7 @@ header h1{font-size:19px;margin:0;flex:1}.wrap{max-width:860px;margin:18px auto;
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
 button,.b{font:inherit;border:0;border-radius:10px;padding:6px 14px;background:var(--teal);color:#fff;cursor:pointer}button.g{background:none;color:var(--teal);border:1.5px solid var(--teal)}button.r{background:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
 input,textarea{font:inherit;width:100%;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}label{display:block;margin:8px 0 2px;color:var(--muted);font-size:15px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}.tabs button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}select{font:inherit;width:100%;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}.tabs button{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}.tabs button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .sp{flex:1}.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.thumbs div{position:relative}.thumbs img{width:84px;height:84px;object-fit:cover;border-radius:10px}.thumbs button{position:absolute;top:2px;inset-inline-start:2px;padding:0 7px;background:var(--red)}
 small{color:var(--muted)}.msg{color:var(--teal);font-weight:700;min-height:1.6em}.err{color:var(--red)}.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.stat b{display:block;font-size:30px;color:var(--teal)}
 details{margin-top:10px}summary{cursor:pointer;color:var(--teal)}
@@ -29,8 +29,8 @@ async function start(){try{role=(await api("GET","/api/admin/me")).role}catch(e)
  $("#role").hidden=false;$("#role").textContent=role==="admin"?"مسؤول":"عرض فقط";$("#out").hidden=false;shell()}
 $("#out").onclick=async()=>{await api("POST","/api/logout").catch(()=>{});location.reload()};
 function shell(){const t=(k,l)=>h("button",{class:tab===k?"on":"",onclick:()=>{tab=k;edit=null;shell()}},l);
- const box=h("div",{});app.replaceChildren(...(ro()?[h("p",{class:"card"},"وضع العرض فقط: تقدر تتصفح اللوحة لكن التعديل متاح للمسؤول بس.")]:[]),h("div",{class:"tabs"},t("news","الأخبار"),t("sug","الاقتراحات"),t("stats","إحصائيات")),box);
- ({news:news,sug:sugs,stats:stats})[tab](box)}
+ const box=h("div",{});app.replaceChildren(...(ro()?[h("p",{class:"card"},"وضع العرض فقط: تقدر تتصفح اللوحة لكن التعديل متاح للمسؤول بس.")]:[]),h("div",{class:"tabs"},t("news","الأخبار"),t("sug","الاقتراحات"),t("agenda","التقويم"),t("honor","لوحة الشرف"),t("polls","الاستطلاعات"),t("stats","إحصائيات")),box);
+ ({news:news,sug:sugs,stats:stats,agenda:b=>crud(b,"agenda"),honor:b=>crud(b,"honor"),polls:b=>crud(b,"polls")})[tab](box)}
 async function news(box){const{news:list}=await fetch("/api/news",{cache:"no-store"}).then(r=>r.json());
  box.replaceChildren(h("div",{class:"row"},h("h2",{class:"sp"},"الأخبار ("+list.length+")"),h("button",{disabled:ro(),onclick:()=>form(box,null)},"+ خبر جديد")),...list.map(n=>h("div",{class:"card"},h("b",{},n.title),h("div",{},h("small",{},(n.date||"بدون تاريخ")+" · "+n.images.length+" صور")),h("div",{class:"row",style:"margin-top:8px"},h("button",{class:"g",disabled:ro(),onclick:()=>form(box,n)},"تعديل"),h("button",{class:"r",disabled:ro(),onclick:async()=>{if(confirm("حذف الخبر نهائيًا؟")){await api("DELETE","/api/admin/news/"+n.id);news(box)}}},"حذف")))))}
 function form(box,n){edit=n;imgs=n?[...n.images]:[];const e=n?.en||{};
@@ -48,6 +48,26 @@ function form(box,n){edit=n;imgs=n?[...n.images]:[];const e=n?.en||{};
 async function sugs(box){const{items}=await api("GET","/api/admin/suggestions");
  box.replaceChildren(h("h2",{},"الاقتراحات ("+items.length+")"),...(items.length?items.map(s=>h("div",{class:"card"},h("p",{style:"margin:0 0 6px;white-space:pre-line"},s.message),h("small",{},(s.name||"بدون اسم")+" · "+new Date(s.created_at).toLocaleString("ar-EG")),h("div",{class:"row",style:"margin-top:8px"},h("span",{class:"b",style:s.status==="done"?"background:#6b8e86":""},s.status==="done"?"تمت المراجعة":"جديد"),h("button",{class:"g",disabled:ro(),onclick:async()=>{await api("PATCH","/api/admin/suggestions/"+s.id,{status:s.status==="done"?"new":"done"});sugs(box)}},s.status==="done"?"إرجاع لجديد":"تمت المراجعة"),h("button",{class:"r",disabled:ro(),onclick:async()=>{if(confirm("حذف الاقتراح؟")){await api("DELETE","/api/admin/suggestions/"+s.id);sugs(box)}}},"حذف")))):[h("p",{},"لا توجد اقتراحات بعد.")]))}
 async function stats(box){const s=await api("GET","/api/admin/stats"),c=(n,l)=>h("div",{class:"card"},h("b",{},String(n)),l);
- box.replaceChildren(h("h2",{},"إحصائيات"),h("div",{class:"stat"},c(s.news,"خبر منشور"),c(s.suggestions,"اقتراح مستلم"),c(s.newSuggestions,"اقتراح جديد"),c(s.images,"صورة مرفوعة")))}
+ box.replaceChildren(h("h2",{},"إحصائيات"),h("div",{class:"stat"},c(s.news,"خبر منشور"),c(s.suggestions,"اقتراح مستلم"),c(s.newSuggestions,"اقتراح جديد"),c(s.images,"صورة مرفوعة"),c(s.events,"حدث وإعلان"),c(s.honor,"طالب في لوحة الشرف"),c(s.polls,"استطلاع"),c(s.votes,"صوت مسجّل")))}
+const CFG={
+ agenda:{name:"التقويم والإعلانات",add:"+ حدث / إعلان",f:[["kind","النوع","sel:event=حدث قادم (يظهر معه عدّاد)|notice=إعلان"],["title","العنوان *","t"],["date","التاريخ *","d"],["body","التفاصيل","a"]],en:[["title","Title","t"],["body","Details","a"]],line:i=>(i.kind==="notice"?"📢 ":"📅 ")+i.title+" · "+i.date},
+ honor:{name:"لوحة الشرف",add:"+ طالب متفوق",f:[["name","اسم الطالب *","t"],["achievement","الإنجاز","a"],["image","الصورة (بموافقة الطالب)","img"]],en:[["name","Name","t"],["achievement","Achievement","a"]],line:i=>"🏆 "+i.name},
+ polls:{name:"الاستطلاعات",add:"+ استطلاع جديد",f:[["question","السؤال *","t"],["options","الاختيارات: كل اختيار في سطر، من ٢ إلى ٦ (لا تتغيّر بعد الإنشاء) *","opt"],["active","الحالة","sel:1=مفتوح|0=مغلق"]],en:[["question","Question","t"],["options","Options (one per line, same order)","opt"]],line:i=>(i.active?"🟢 ":"🔴 ")+i.question}};
+const shrink=async(file,mx)=>{const bm=await createImageBitmap(file),k=Math.min(1,mx/Math.max(bm.width,bm.height)),c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);const d=c.toDataURL("image/webp",.82);return d.startsWith("data:image/webp")?d:c.toDataURL("image/jpeg",.84)};
+async function crud(box,res){const C=CFG[res],items=(await api("GET","/api/admin/"+res)).items;
+ box.replaceChildren(h("div",{class:"row"},h("h2",{class:"sp"},C.name+" ("+items.length+")"),h("button",{disabled:ro(),onclick:()=>cform(box,res,null)},C.add)),...items.map(i=>h("div",{class:"card"},h("b",{},C.line(i)),...(res==="polls"?i.options.map((o,k)=>h("div",{},h("small",{},o+": "+i.counts[k]))):[]),h("div",{class:"row",style:"margin-top:8px"},h("button",{class:"g",disabled:ro(),onclick:()=>cform(box,res,i)},"تعديل"),h("button",{class:"r",disabled:ro(),onclick:async()=>{if(confirm("حذف نهائي؟")){await api("DELETE","/api/admin/"+res+"/"+i.id);crud(box,res)}}},"حذف")))))}
+function cform(box,res,it){const C=CFG[res],E=it?.en||{};let img=it?.image||"";const pv=h("div",{class:"thumbs"}),dr=()=>pv.replaceChildren(...(img?[h("div",{},h("img",{src:img,alt:""}),h("button",{type:"button",onclick:()=>{img="";dr()}},"×"))]:[]));dr();
+ const fld=([k,l,t],src,pre)=>{const id=pre+k,v=src[k];let e;
+  if(t==="a")e=h("textarea",{id,rows:3},v||"");
+  else if(t==="d")e=h("input",{id,type:"date",value:v||""});
+  else if(t==="opt")e=h("textarea",{id,rows:4,disabled:pre==="f"&&!!it},Array.isArray(v)?v.join("\n"):"");
+  else if(t.startsWith("sel:")){const os=t.slice(4).split("|").map(o=>o.split("="));e=h("select",{id},...os.map(([a,b])=>h("option",{value:a,selected:String(v??os[0][0])===a},b)))}
+  else if(t==="img")e=h("input",{id,type:"file",accept:"image/*",onchange:async ev=>{const f=ev.target.files[0];if(!f)return;try{img=(await api("POST","/api/admin/image",{data:await shrink(f,700)})).url;dr()}catch(x){$("#cm").textContent="تعذّر رفع الصورة."}}});
+  else e=h("input",{id,maxlength:200,value:v||""});
+  return[h("label",{for:id},l),e,...(t==="img"?[pv]:[])]};
+ box.replaceChildren(h("div",{class:"card"},h("h2",{},it?"تعديل":C.add),...C.f.flatMap(f=>fld(f,it||{},"f")),h("details",{},h("summary",{},"الترجمة الإنجليزية (اختياري)"),...C.en.flatMap(f=>fld(f,E,"e"))),h("p",{class:"msg err",id:"cm"}),h("div",{class:"row"},h("button",{onclick:sv},"حفظ ونشر"),h("button",{class:"g",onclick:()=>crud(box,res)},"إلغاء"))));
+ async function sv(){const rd=(k,t,pre)=>{const v=$("#"+pre+k).value;return t==="opt"?v.split("\n").map(x=>x.trim()).filter(Boolean):k==="active"?+v:v},b={},en={};
+  C.f.forEach(([k,l,t])=>{if(t==="img")b[k]=img;else if(!(t==="opt"&&it))b[k]=rd(k,t,"f")});C.en.forEach(([k,l,t])=>en[k]=rd(k,t,"e"));b.en=en;
+  try{it?await api("PUT","/api/admin/"+res+"/"+it.id,b):await api("POST","/api/admin/"+res,b);crud(box,res)}catch(x){$("#cm").textContent="تعذّر الحفظ. تأكد من الحقول الأساسية (*)."}}}
 start();
 </script></body></html>
