@@ -1,0 +1,9 @@
+{
+  "name": "darawbananen",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": { "directory": "./", "binding": "ASSETS" },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "daraw-db", "database_id": "757d715b-188e-43f6-a090-ee9beb6e2a16" }
+  ]
+}
