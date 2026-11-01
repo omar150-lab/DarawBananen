@@ -50,7 +50,11 @@ async function init(DB){if(ready)return;
   DB.prepare("CREATE TABLE IF NOT EXISTS suggestions(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT DEFAULT '',message TEXT NOT NULL,status TEXT DEFAULT 'new',created_at INTEGER)"),
   DB.prepare("CREATE TABLE IF NOT EXISTS images(id INTEGER PRIMARY KEY AUTOINCREMENT,mime TEXT,data TEXT)"),
   DB.prepare("CREATE TABLE IF NOT EXISTS events(kind TEXT,ip TEXT,ts INTEGER)"),
-  DB.prepare("CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY,v TEXT)")]);
+  DB.prepare("CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY,v TEXT)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS agenda(id INTEGER PRIMARY KEY AUTOINCREMENT,kind TEXT DEFAULT 'event',title TEXT NOT NULL,body TEXT DEFAULT '',date TEXT,en TEXT DEFAULT '{}',created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS honor(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,achievement TEXT DEFAULT '',image TEXT DEFAULT '',en TEXT DEFAULT '{}',created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS polls(id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT NOT NULL,options TEXT NOT NULL,active INTEGER DEFAULT 1,en TEXT DEFAULT '{}',created_at INTEGER)"),
+  DB.prepare("CREATE TABLE IF NOT EXISTS votes(poll_id INTEGER,voter TEXT,opt INTEGER,ts INTEGER,PRIMARY KEY(poll_id,voter))")]);
  await DB.batch([...SEED.slice().reverse().map(n=>DB.prepare("INSERT INTO news(title,who,body,date,images,en,created_at) SELECT ?,?,?,'',?,'{}',? WHERE NOT EXISTS(SELECT 1 FROM meta WHERE k='seeded')").bind(n.title,n.who,n.body,JSON.stringify(n.images),Date.now())),DB.prepare("INSERT OR IGNORE INTO meta VALUES('seeded','1')")]);
  ready=true}
 const row=r=>({id:r.id,title:r.title,who:r.who,text:r.body,date:r.date,images:pj(r.images,[]),en:pj(r.en,{})});
@@ -63,10 +67,27 @@ async function img(DB,id,req,ctx){const c=typeof caches!=="undefined"?caches.def
  const r=await DB.prepare("SELECT mime,data FROM images WHERE id=?").bind(id).first();if(!r)return new Response("not found",{status:404});
  const b=atob(r.data),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);
  const res=new Response(a,{headers:{"content-type":r.mime,"cache-control":"public, max-age=31536000, immutable","x-content-type-options":"nosniff"}});if(c)ctx.waitUntil(c.put(req,res.clone()));return res}
+const dt=v=>{v=s(v,10);return/^\d{4}-\d{2}-\d{2}$/.test(v)?v:""};
+const imgp=v=>typeof v==="string"&&/^\/img\/\d+$/.test(v)?v:"";
+const enj=(e,ks)=>JSON.stringify(Object.fromEntries(ks.map(k=>[k,s((e||{})[k],800)])));
+const lines=a=>(Array.isArray(a)?a:[]).map(x=>s(x,80)).filter(Boolean).slice(0,6);
+const RES={
+ agenda:{o:"date ASC,id DESC",c:b=>{const title=s(b.title,150),date=dt(b.date);return title&&date?{kind:b.kind==="notice"?"notice":"event",title,body:s(b.body,800),date,en:enj(b.en,["title","body"])}:null}},
+ honor:{o:"id DESC",c:b=>{const name=s(b.name,120);return name?{name,achievement:s(b.achievement,300),image:imgp(b.image),en:enj(b.en,["name","achievement"])}:null}},
+ polls:{o:"id DESC",c:(b,upd)=>{const q=s(b.question,200),o=lines(b.options);if(!q||(!upd&&o.length<2))return null;const e=b.en||{};
+  const r={question:q,active:b.active===0||b.active===false?0:1,en:JSON.stringify({question:s(e.question,200),options:lines(e.options)})};if(!upd)r.options=JSON.stringify(o);return r}}};
+async function list(DB,r,all){const q="SELECT * FROM "+r+(r==="polls"&&!all?" WHERE active=1":"")+" ORDER BY "+RES[r].o,rows=(await DB.prepare(q).all()).results,cnt={};
+ if(r==="polls")(await DB.prepare("SELECT poll_id,opt,COUNT(*) c FROM votes GROUP BY poll_id,opt").all()).results.forEach(z=>{(cnt[z.poll_id]=cnt[z.poll_id]||{})[z.opt]=z.c});
+ return rows.map(x=>{const o={...x,en:pj(x.en,{})};delete o.created_at;if(r==="polls"){o.options=pj(x.options,[]);o.counts=o.options.map((_,i)=>(cnt[x.id]||{})[i]||0)}return o})}
 async function route(req,env,ctx,u,p){const m=req.method,DB=env.DB;let x;
  if(m==="GET"&&(x=/^\/img\/(\d+)$/.exec(p)))return img(DB,+x[1],req,ctx);
  if(m==="GET"&&p==="/api/news"){const{results}=await DB.prepare("SELECT * FROM news ORDER BY date DESC,id DESC").all();return J({news:results.map(row)})}
+ if(m==="GET"&&(x=/^\/api\/(agenda|honor|polls)$/.exec(p)))return J({items:await list(DB,x[1],false)});
  const body=m==="GET"||m==="DELETE"?{}:await req.json().catch(()=>({}));
+ if(m==="POST"&&p==="/api/vote"){const id=+body.poll,opt=+body.opt,tok=s(body.token,40);if(!/^[A-Za-z0-9]{16,40}$/.test(tok))return J({error:"token"},400);
+  const pl=await DB.prepare("SELECT options,active FROM polls WHERE id=?").bind(id).first(),n=pl?pj(pl.options,[]).length:0;if(!pl||!pl.active||!(opt>=0&&opt<n))return J({error:"invalid"},400);
+  const ip=await ipid(req,env);if(await limited(DB,"vote",ip,200,36e5))return J({error:"rate"},429);
+  const r=await DB.prepare("INSERT OR IGNORE INTO votes(poll_id,voter,opt,ts) VALUES(?,?,?,?)").bind(id,tok,opt,Date.now()).run();await hit(DB,"vote",ip);return J({ok:true,duplicate:r.meta.changes===0})}
  if(m==="POST"&&p==="/api/suggest"){if(body.website)return J({ok:true});const msg=s(body.message,600);if(msg.length<5)return J({error:"short"},400);
   const ip=await ipid(req,env);if(await limited(DB,"sug",ip,5,36e5))return J({error:"rate"},429);
   await DB.prepare("INSERT INTO suggestions(name,message,created_at) VALUES(?,?,?)").bind(s(body.name,60),msg,Date.now()).run();await hit(DB,"sug",ip);return J({ok:true})}
@@ -79,8 +100,15 @@ async function route(req,env,ctx,u,p){const m=req.method,DB=env.DB;let x;
  const role=await roleOf(req,env);if(!role)return J({error:"auth"},401);
  if(m!=="GET"){if(role!=="admin")return J({error:"view-only"},403);const o=req.headers.get("origin");if(o&&new URL(o).host!==u.host)return J({error:"origin"},403)}
  if(m==="GET"&&p==="/api/admin/me")return J({role});
- if(m==="GET"&&p==="/api/admin/stats"){const c=async q=>(await DB.prepare(q).first()).c;return J({news:await c("SELECT COUNT(*) c FROM news"),suggestions:await c("SELECT COUNT(*) c FROM suggestions"),newSuggestions:await c("SELECT COUNT(*) c FROM suggestions WHERE status='new'"),images:await c("SELECT COUNT(*) c FROM images")})}
+ if(m==="GET"&&p==="/api/admin/stats"){const c=async q=>(await DB.prepare(q).first()).c;return J({news:await c("SELECT COUNT(*) c FROM news"),suggestions:await c("SELECT COUNT(*) c FROM suggestions"),newSuggestions:await c("SELECT COUNT(*) c FROM suggestions WHERE status='new'"),images:await c("SELECT COUNT(*) c FROM images"),events:await c("SELECT COUNT(*) c FROM agenda"),honor:await c("SELECT COUNT(*) c FROM honor"),polls:await c("SELECT COUNT(*) c FROM polls"),votes:await c("SELECT COUNT(*) c FROM votes")})}
  if(m==="GET"&&p==="/api/admin/suggestions"){const{results}=await DB.prepare("SELECT * FROM suggestions ORDER BY id DESC LIMIT 200").all();return J({items:results})}
+ if((x=/^\/api\/admin\/(agenda|honor|polls)(?:\/(\d+))?$/.exec(p))){const r=x[1],id=x[2]&&+x[2];
+  if(m==="GET"&&!id)return J({items:await list(DB,r,true)});
+  if(m==="POST"&&!id){const c=RES[r].c(body,false);if(!c)return J({error:"invalid"},400);const k=Object.keys(c),q=await DB.prepare("INSERT INTO "+r+"("+k.join(",")+",created_at) VALUES("+k.map(()=>"?").join(",")+",?)").bind(...k.map(z=>c[z]),Date.now()).run();return J({id:q.meta.last_row_id})}
+  if(id){const old=await DB.prepare("SELECT * FROM "+r+" WHERE id=?").bind(id).first();if(!old)return J({error:"not-found"},404);
+   if(m==="PUT"){const c=RES[r].c(body,true);if(!c)return J({error:"invalid"},400);const k=Object.keys(c);await DB.prepare("UPDATE "+r+" SET "+k.map(z=>z+"=?").join(",")+" WHERE id=?").bind(...k.map(z=>c[z]),id).run();if(r==="honor"&&old.image!==c.image)await dropImgs(DB,ids([old.image]));return J({ok:true})}
+   if(m==="DELETE"){await DB.prepare("DELETE FROM "+r+" WHERE id=?").bind(id).run();if(r==="polls")await DB.prepare("DELETE FROM votes WHERE poll_id=?").bind(id).run();if(r==="honor")await dropImgs(DB,ids([old.image]));return J({ok:true})}}
+  return J({error:"not-found"},404)}
  if(m==="POST"&&p==="/api/admin/image"){const g=/^data:(image\/(?:webp|jpeg|png));base64,([A-Za-z0-9+\/=]+)$/.exec(body.data||"");if(!g||g[2].length>1.2e6)return J({error:"bad-image"},400);
   const r=await DB.prepare("INSERT INTO images(mime,data) VALUES(?,?)").bind(g[1],g[2]).run();return J({url:"/img/"+r.meta.last_row_id})}
  if(m==="POST"&&p==="/api/admin/news"){const n=clean(body);if(!n)return J({error:"invalid"},400);
